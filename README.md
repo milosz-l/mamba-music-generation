@@ -30,7 +30,7 @@
 ### Planowany zakres eksperymentów
 1. Trenowanie architektury Mamba do generowania muzyki w formacie symbolicznym (MIDI, ABC albo MusicXML).
 2. Ewaluacja wyników (głównie poprzez ankietyzacje z testem statystycznym).
-    - Porównanie muzyki wygenerowanej do prawdziwej orazwygenerowanej przez inne modele.
+    - Porównanie muzyki wygenerowanej do prawdziwej oraz wygenerowanej przez inne modele.
     - Przeprowadzenie analizy Mean Opinion Score (MOS).
     - Metryki.
 3. (Opcjonalnie) Dodanie warunkowania tekstem.
