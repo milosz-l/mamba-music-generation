@@ -3,7 +3,7 @@
 ### Temat projektu
 ***Symbolic music generation using Mamba architecture***
 
-Przez ostatnie lata wiele wysiłku zostało włożone w to, aby uczynić Transformery coraz bardziej wydajnymi. Jest natomiast możliwe, że będą one stopniowo zastępowane zaproponowaną niedawno, nową architekturą Mamba. Nie znaleźliśmy żadnych badań dotyczących wykorzystania tej architektury do generowania muzyki. W związku z tym chcielibyśmy sami sprawdzić jak Mamba sprawdza się w tym zadaniu.
+Przez ostatnie lata wiele wysiłku zostało włożone w to, aby uczynić Transformery coraz bardziej wydajnymi. Jednak od skosunkowo niedawna odczuwają one coraz większą konkurencję ze strony modeli oparytch o architekturę SSM (State Space Models), które dorównją, a nawet pokonują je w wielu zadaniach. Najnowszym i jak dotąd najlepszym modelem SSM jest Mamba. Nie znaleźliśmy żadnych badań dotyczących wykorzystania tej architektury do generowania muzyki w formacie symbolicznym. W związku z tym chcielibyśmy sami sprawdzić jak Mamba sprawdza się w tym zadaniu.
 
 Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy użyciu architektury Mamba. Docelowo planujemy generować muzykę w formacie MIDI, lecz jest możliwe że ostatecznie skupimy się na formacie ABC lub MusicXML.
 
