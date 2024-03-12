@@ -60,3 +60,4 @@
 - SMITH, Jimmy TH; WARRINGTON, Andrew; LINDERMAN, Scott W. Simplified state space layers for sequence modeling. arXiv preprint arXiv:2208.04933, 2022.
 - VINAY, Ashvala; LERCH, Alexander. Evaluating generative audio systems and their metrics. arXiv preprint arXiv:2209.00130, 2022.
 - YANG, Li-Chia; LERCH, Alexander. On the evaluation of generative models in music. Neural Computing and Applications, 2020, 32.9: 4773-4784.
+- FRADET, Nathan, et al. MidiTok: A python package for MIDI file tokenization. arXiv preprint arXiv:2310.17202, 2023.
