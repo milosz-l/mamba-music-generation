@@ -1,7 +1,11 @@
 # WIMU projekt
 ## Design proposal
 ### Temat projektu
-*Symbolic music generation using Mamba architecture*
+***Symbolic music generation using Mamba architecture***
+
+Przez ostatnie lata wiele wysiłku zostało włożone w to, aby uczynić Transformery coraz bardziej wydajnymi. Jest natomiast możliwe, że będą one stopniowo zastępowane zaproponowaną niedawno, nową architekturą Mamba. Nie znaleźliśmy żadnych badań dotyczących wykorzystania tej architektury do generowania muzyki. W związku z tym chcielibyśmy sami sprawdzić jak Mamba sprawdza się w tym zadaniu.
+
+Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy użyciu architektury Mamba. Docelowo planujemy generować muzykę w formacie MIDI, lecz jest możliwe że ostatecznie skupimy się na formacie ABC lub MusicXML.
 
 ### Harmonogram
 **UWAGA:** Harmonogram będzie zmieniany dynamicznie wraz z postępem prac.
@@ -33,8 +37,9 @@
     - Porównanie muzyki wygenerowanej do prawdziwej oraz wygenerowanej przez inne modele.
     - Przeprowadzenie analizy Mean Opinion Score (MOS).
     - Metryki.
-3. (Opcjonalnie) Dodanie warunkowania tekstem.
-4. Opisanie następnych kroków i możliwych opcji rozwoju.
+3. (Opcjonalne) Porównanie z transformerem.
+4. (Opcjonalnie) Dodanie warunkowania tekstem.
+5. Opisanie następnych kroków i możliwych opcji rozwoju.
 
 ### Planowany stack technologiczny
 1. Python 3
