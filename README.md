@@ -55,3 +55,8 @@
 
 ## Bibliografia
 - GU, Albert; DAO, Tri. Mamba: Linear-time sequence modeling with selective state spaces. arXiv preprint arXiv:2312.00752, 2023.
+- GU, Albert, et al. Combining recurrent, convolutional, and continuous-time models with linear state space layers. Advances in neural information processing systems, 2021, 34: 572-585.
+- GU, Albert; GOEL, Karan; RÉ, Christopher. Efficiently modeling long sequences with structured state spaces. arXiv preprint arXiv:2111.00396, 2021.
+- SMITH, Jimmy TH; WARRINGTON, Andrew; LINDERMAN, Scott W. Simplified state space layers for sequence modeling. arXiv preprint arXiv:2208.04933, 2022.
+- VINAY, Ashvala; LERCH, Alexander. Evaluating generative audio systems and their metrics. arXiv preprint arXiv:2209.00130, 2022.
+- YANG, Li-Chia; LERCH, Alexander. On the evaluation of generative models in music. Neural Computing and Applications, 2020, 32.9: 4773-4784.
