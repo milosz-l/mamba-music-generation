@@ -3,7 +3,8 @@
 ### Temat projektu
 ***Symbolic music generation using Mamba architecture***
 
-Przez ostatnie lata wiele wysiłku zostało włożone w to, aby uczynić Transformery coraz bardziej wydajnymi. Jednak od skosunkowo niedawna odczuwają one coraz większą konkurencję ze strony modeli oparytch o architekturę SSM (State Space Models), które dorównją, a nawet pokonują je w wielu zadaniach. Najnowszym i jak dotąd najlepszym modelem SSM jest Mamba. Nie znaleźliśmy żadnych badań dotyczących wykorzystania tej architektury do generowania muzyki w formacie symbolicznym. W związku z tym chcielibyśmy sami sprawdzić jak Mamba sprawdza się w tym zadaniu.
+Przez ostatnie lata wiele wysiłku zostało włożone w to, aby uczynić Transformery coraz bardziej wydajnymi. Jednak od stosunkowo niedawna odczuwają one coraz większą konkurencję ze strony modeli oparytch o architekturę SSM (State Space Models), które dorównją, a nawet pokonują je w wielu zadaniach. Najnowszym i jak dotąd najlepszym modelem SSM jest Mamba. Nie znaleźliśmy żadnych badań dotyczących wykorzystania tej architektury do generowania muzyki w formacie symbolicznym. W związku z tym chcielibyśmy sami sprawdzić jak Mamba sprawdza się w tym zadaniu.
+Perspektywy wydają się bardzo obiecujące ze względu na specyfikację tej architektury, której przewaga nad klasycznymi transformerami uwypukla sie w przypadku coraz to dłuższych sekwencji. Dlatego muzyka wydaje się idealnym polem do zbadania działania Mamby.
 
 Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy użyciu architektury Mamba. Docelowo planujemy generować muzykę w formacie MIDI, lecz jest możliwe że ostatecznie skupimy się na formacie ABC lub MusicXML.
 
@@ -47,15 +48,15 @@ Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy u�
     - linter: ruff
     - Środowisko wirtualne: Pipenv lub Pip + venv
     - struktura projektu: cookiecutter
-3. PyTorch
+2. PyTorch
     - Tensorboard / MLFlow / wandb
     - PyTorch Lightning
-5. MidiTok
-6. MusPy
-7. pretty_midi
-8. Git
-9. GitHub
-10. Huggingface
+3. MidiTok
+4. MusPy
+5. pretty_midi
+6. Git
+7. GitHub 
+8. Huggingface
 
 
 ## Bibliografia
@@ -66,3 +67,4 @@ Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy u�
 - VINAY, Ashvala; LERCH, Alexander. Evaluating generative audio systems and their metrics. arXiv preprint arXiv:2209.00130, 2022.
 - YANG, Li-Chia; LERCH, Alexander. On the evaluation of generative models in music. Neural Computing and Applications, 2020, 32.9: 4773-4784.
 - FRADET, Nathan, et al. MidiTok: A python package for MIDI file tokenization. arXiv preprint arXiv:2310.17202, 2023.
+- Peiling Lu, Xin Xu, Chenfei Kang, Botao Yu, Chengyi Xing, Xu Tan, Jiang Bian, MuseCoco: Generating Symbolic Music from Text, arXiv preprint arXiv:2306.00110.pdf, 2023
