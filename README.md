@@ -182,5 +182,5 @@ Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy u�
 - Peiling Lu, Xin Xu, Chenfei Kang, Botao Yu, Chengyi Xing, Xu Tan, Jiang Bian, MuseCoco: Generating Symbolic Music from Text, arXiv preprint arXiv:2306.00110.pdf, 2023
 
 
-### Tabela
-![sources_analysis_table](docs/sources_analysis_table.md)
+### Tabela z analizą źródeł
+[Link](docs/sources_analysis_table.md)
