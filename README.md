@@ -180,3 +180,7 @@ Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy u�
 - YANG, Li-Chia; LERCH, Alexander. On the evaluation of generative models in music. Neural Computing and Applications, 2020, 32.9: 4773-4784.
 - FRADET, Nathan, et al. MidiTok: A python package for MIDI file tokenization. arXiv preprint arXiv:2310.17202, 2023.
 - Peiling Lu, Xin Xu, Chenfei Kang, Botao Yu, Chengyi Xing, Xu Tan, Jiang Bian, MuseCoco: Generating Symbolic Music from Text, arXiv preprint arXiv:2306.00110.pdf, 2023
+
+
+### Tabela
+![sources_analysis_table](docs/sources_analysis_table.md)
