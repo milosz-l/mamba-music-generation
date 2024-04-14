@@ -101,3 +101,4 @@ data/*/*
 # Notebooks
 notebooks/*
 !notebooks/.gitkeep
+venv*/
