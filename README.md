@@ -184,3 +184,6 @@ Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy u�
 
 ### Tabela z analizą źródeł
 [Link](docs/sources_analysis_table.md)
+
+### Omówienie architektury Mamba
+[Link](docs/mamba.md)
