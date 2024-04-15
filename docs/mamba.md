@@ -38,7 +38,7 @@ Quick comparison
 |---------------|----------|--------|-------------|
 | Transformer   | O(N^2)   | O(N^2) | great       |
 | RNN           | O(N)     | O(N)   | poor        |
-| SMM           | O(N)     | O(N)   | poor        |
+| SSM           | O(N)     | O(N)   | poor        |
 | Selective SSM | O(N)     | O(N)   | great       |
 
 Originally it is created for modeling long sequences with big context with efficient usage of it like DNA's or audiowaves
