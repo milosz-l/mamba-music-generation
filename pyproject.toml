@@ -1,6 +1,6 @@
 
 [tool.poetry]
-name = "mamba-music"
+name = "mamba-music-generation"
 version = "0.1.0"
 description = ""
 authors = ["Jan Retkowski, Milosz Lopatto, Jakub Stepniak"]
@@ -50,7 +50,7 @@ line-length = 88
 
 [tool.ruff.lint]
 ignore = ["E501"]
-select = ["B","C","E","F","W","B9", "I", "Q"]
+select = ["B", "C", "E", "F", "W", "B9", "I", "Q"]
 
 [tool.ruff.lint.mccabe]
 max-complexity = 10

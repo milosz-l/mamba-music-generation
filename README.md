@@ -1,4 +1,4 @@
-# mamba-music
+# mamba-music-generation
 
 ## Tools used in this project
 * [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
