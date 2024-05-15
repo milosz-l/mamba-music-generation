@@ -8,6 +8,8 @@ authors = ["Jan Retkowski, Milosz Lopatto, Jakub Stepniak"]
 [tool.poetry.dependencies]
 python = "^3.8"
 hydra-core = "^1.1.1"
+setuptools = "^69.5.1"
+wheel = "^0.43.0"
 
 [tool.poetry.dev-dependencies]
 pdoc3 = "^0.10.0"
