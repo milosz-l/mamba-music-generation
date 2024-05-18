@@ -1,4 +1,4 @@
-# mamba-music
+# mamba-music-generation
 
 ## Tools used in this project
 * [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
@@ -53,6 +53,7 @@ poetry shell
 3. Install dependencies:
 - To install all dependencies from pyproject.toml, run:
 ```bash
+pip install --upgrade pip setuptools wheel
 poetry install
 ```
 - To install only production dependencies, run:
@@ -62,6 +63,21 @@ poetry install --only main
 - To install a new package, run:
 ```bash
 poetry add <package-name>
+```
+
+# Installation verification!
+
+After these commands paste:
+```bash
+python src/test_env.py
+```
+
+If it won't work try with installing following dependencies through pip:
+
+```bash
+pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+pip install causal_conv1d==1.2.*
+pip install mamba-ssm==1.2.0.post1
 ```
 
 
@@ -184,3 +200,6 @@ Projekt ma na celu zbadanie możliwości generowania muzyki symbolicznej przy u�
 
 ### Tabela z analizą źródeł
 [Link](docs/sources_analysis_table.md)
+
+### Omówienie architektury Mamba
+[Link](docs/mamba.md)
