@@ -5,37 +5,26 @@ Author: Khuyen Tran
 """
 
 import hydra
-from omegaconf import DictConfig
 import torch
-from mamba_ssm import Mamba
+from omegaconf import DictConfig
+from training_interface import LighteningMamba
+import pytorch_lightning as pl
+from pytorch_lightning.loggers import WandbLogger
+from callbacks import get_callbacks
 
 from tokenizer import get_tokenized_dataloader
 
 
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def train_model(config: DictConfig):
+    torch.set_float32_matmul_precision('medium')
 
-    dataloader = get_tokenized_dataloader(config)
+    callbacks = get_callbacks(config.training.callbacks)
 
-    for batch in dataloader:
-        print(batch)
-
-    batch, length, dim = 2, 64, 16
-    print(torch.cuda.is_available())
-    x = torch.randn(batch, length, dim).to("cuda")
-    model = Mamba(
-        # This module uses roughly 3 * expand * d_model^2 parameters
-        d_model=dim,  # Model dimension d_model
-        d_state=16,  # SSM state expansion factor
-        d_conv=4,  # Local convolution width
-        expand=2,  # Block expansion factor
-    ).to("cuda")
-    y = model(x)
-    assert y.shape == x.shape
-    print(f"Train modeling using {config.data.processed}")
-    print(f"Model used: {config.model.name}")
-    print(f"Save the output to {config.data.final}")
-
+    wandb_logger = WandbLogger(log_model="all")
+    interface_model = LighteningMamba(config)
+    trainer = pl.Trainer(callbacks=callbacks, max_epochs=config.training.epochs, logger=wandb_logger)
+    trainer.fit(interface_model)
 
 
 if __name__ == "__main__":

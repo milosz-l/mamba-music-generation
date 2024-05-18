@@ -53,6 +53,7 @@ poetry shell
 3. Install dependencies:
 - To install all dependencies from pyproject.toml, run:
 ```bash
+pip install --upgrade pip setuptools wheel
 poetry install
 ```
 - To install only production dependencies, run:
@@ -64,26 +65,16 @@ poetry install --only main
 poetry add <package-name>
 ```
 
-### Installing Mamba module
+# Installation verification!
 
-Dependencies!
-- Linux
-- NVIDIA GPU
-- PyTorch>=1.12.*
-- torch==2.1.* (Cannot be > 2.1)
-- CUDA == 11.8
+After these commands paste:
+```bash
+python src/test_env.py
+```
 
-To install the newest CUDA version follow below websites:
-
-- [For complete installation with all dependencies](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/)
-- [Installing only cuda](https://developer.nvidia.com/cuda-11-8-0-download-archive)
-
-Best option is doing this using .run file and install cuda without nvidia drivers which you should install separately if you don't have drivers already
-
-If you fulfill dependencies paste:
+If it won't work try with installing following dependencies through pip:
 
 ```bash
-pip install --upgrade pip setuptools wheel
 pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
 pip install causal_conv1d==1.2.*
 pip install mamba-ssm==1.2.0.post1
