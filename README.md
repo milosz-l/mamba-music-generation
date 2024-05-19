@@ -65,6 +65,12 @@ poetry install --only main
 poetry add <package-name>
 ```
 
+## Set up wandb
+After creating an account on [wandb](https://wandb.ai/site), creating a project, and setting up the variables in the *config/main.yaml*, then run in the terminal:
+```bash
+wandb login
+```
+
 # Installation verification!
 
 After these commands paste:

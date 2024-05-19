@@ -17,14 +17,18 @@ from tokenizer import get_tokenized_dataloader
 
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def train_model(config: DictConfig):
+    
+    wandb_logger = WandbLogger(project=config.wandb.project, log_model="all")
+
     torch.set_float32_matmul_precision('medium')
 
     callbacks = get_callbacks(config.training.callbacks)
 
-    wandb_logger = WandbLogger(log_model="all")
     interface_model = LighteningMamba(config)
     trainer = pl.Trainer(callbacks=callbacks, max_epochs=config.training.epochs, logger=wandb_logger)
     trainer.fit(interface_model)
+
+    wandb.finish()
 
 
 if __name__ == "__main__":
