@@ -12,8 +12,6 @@ import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
 from callbacks import get_callbacks
 
-from tokenizer import get_tokenized_dataloader
-
 
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def train_model(config: DictConfig):

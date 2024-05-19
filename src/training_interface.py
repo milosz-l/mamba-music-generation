@@ -17,19 +17,22 @@ class LighteningMamba(pl.LightningModule):
         self.batch_size = config.training.batch_size
         self.learning_rate = config.training.learning_rate
 
-        self.model = get_mamba_model(config.model)
         self.loss_function = nn.CrossEntropyLoss()
+        self.model = get_mamba_model(config.model)
         self.embed = torch.nn.Embedding(
             num_embeddings=config.model.vocab_size,
             embedding_dim=config.model.model_dimension
         )
         self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataloader(config.data)
 
+        self.output_layer = nn.Linear(config.model.model_dimension, config.model.vocab_size)
+
         self.save_hyperparameters(ignore=['model'])
 
     def forward(self, input_ids, attention_mask=None):
         embeddings = self.embed(input_ids)
-        return self.model(embeddings)
+        model_output = self.model(embeddings)
+        return self.output_layer(model_output)
 
     def predict(self, input_ids, attention_mask=None):
         embeddings = self.embed(input_ids)
@@ -38,8 +41,7 @@ class LighteningMamba(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         input_ids, attention_mask = batch['input_ids'], batch['attention_mask']
         outputs = self(input_ids, attention_mask)
-
-        loss = self.loss_function(outputs.transpose(1, 2), input_ids)  # Adjust dimensions if necessary
+        loss = self.loss_function(outputs.transpose(1, 2), input_ids)
 
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         return loss
@@ -47,7 +49,6 @@ class LighteningMamba(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         input_ids, attention_mask = batch['input_ids'], batch['attention_mask']
         outputs = self(input_ids, attention_mask)
-
         loss = self.loss_function(outputs.transpose(1, 2), input_ids)
 
         self.log('val_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
