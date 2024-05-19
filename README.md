@@ -86,6 +86,8 @@ pip install causal_conv1d==1.2.*
 pip install mamba-ssm==1.2.0.post1
 ```
 
+In case the above does not work, please make sure you have cuda devel toolkit installed.
+
 
 ## View and alter configurations
 To view the configurations associated with a Pythons script, run the following command:

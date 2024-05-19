@@ -10,6 +10,7 @@ from omegaconf import DictConfig
 from training_interface import LighteningMamba
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import WandbLogger
+import wandb
 from callbacks import get_callbacks
 
 
