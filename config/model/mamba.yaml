@@ -1,0 +1,6 @@
+name: mamba
+model_dimension: 64
+conv_width: 4
+state_expansion_factor: 16
+block_expansion_factor: 2
+vocab_size: 30000

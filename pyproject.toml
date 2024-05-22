@@ -8,6 +8,16 @@ authors = ["Jan Retkowski, Milosz Lopatto, Jakub Stepniak"]
 [tool.poetry.dependencies]
 python = "^3.8"
 hydra-core = "^1.1.1"
+setuptools = "^69.5.1"
+wheel = "^0.43.0"
+pytorch-lightning = "^2.2.4"
+torch = "2.1.1"
+miditok = "^3.0.3"
+wandb = "^0.17.0"
+muspy = "^0.5.0"
+causal-conv1d = "==1.2.*"
+torchvision = "0.16.1"
+mamba-ssm = "1.2.0.post1"
 
 [tool.poetry.dev-dependencies]
 pdoc3 = "^0.10.0"
