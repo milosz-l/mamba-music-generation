@@ -133,6 +133,90 @@ To auto-generate API document for your project, run:
 make docs
 ```
 
+## Run jobs with slurm
+
+Install slurm (example for Ubuntu/Debian):
+```bash
+sudo apt-get update
+sudo apt-get install slurm-wlm
+```
+
+Configure slurm:
+```bash
+sudo mkdir -p /etc/slurm-llnl
+sudo touch /etc/slurm-llnl/slurm.conf
+```
+Now open this file with any editor and paste this:
+```
+# Example slurm.conf file
+ClusterName=your_cluster_name
+SlurmctldHost=localhost
+SlurmUser=slurm
+SlurmdUser=slurm
+StateSaveLocation=/var/spool/slurm-llnl
+SlurmdSpoolDir=/var/spool/slurmd
+SwitchType=switch/none
+MpiDefault=none
+SlurmdPort=6818
+SlurmctldPort=6817
+ProctrackType=proctrack/pgid
+ReturnToService=1
+SlurmdLogFile=/var/log/slurmd.log
+SlurmctldLogFile=/var/log/slurmctld.log
+SlurmdPidFile=/var/run/slurmd.pid
+SlurmctldPidFile=/var/run/slurmctld.pid
+SlurmdPort=6818
+SlurmctldPort=6817
+AuthType=auth/munge
+CryptoType=crypto/munge
+SchedulerType=sched/backfill
+SelectType=select/cons_res
+SelectTypeParameters=CR_Core
+TaskPlugin=task/affinity
+
+NodeName=localhost CPUs=4 State=UNKNOWN
+PartitionName=debug Nodes=localhost Default=YES MaxTime=INFINITE State=UP
+```
+
+Create necessary directories:
+```bash
+sudo mkdir -p /var/spool/slurm-llnl
+sudo mkdir -p /var/spool/slurmd
+sudo touch /var/log/slurmd.log /var/log/slurmctld.log
+sudo chown -R slurm: /var/spool/slurm-llnl /var/spool/slurmd /var/log/slurmd.log /var/log/slurmctld.log
+```
+
+Install and configure Munge (example for Ubuntu/Debian):
+```bash
+sudo apt-get install munge libmunge-dev
+sudo /usr/sbin/create-munge-key
+sudo systemctl enable munge
+sudo systemctl start munge
+```
+
+In case you get an error with create-munge-key, create it manually:
+```bash
+sudo dd if=/dev/urandom bs=1 count=1024 of=/etc/munge/munge.key
+sudo chown munge: /etc/munge/munge.key
+sudo chmod 400 /etc/munge/munge.key
+sudo -u munge munged
+```
+
+Schedule jobs:
+```bash
+sbatch run_job.sh
+```
+
+Check scheduled jobs:
+```bash
+squeue -u your_username
+```
+
+Cancel all jobs:
+```bash
+scancel -u your_username
+```
+
 
 # WIMU projekt
 ## Design proposal
