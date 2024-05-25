@@ -19,3 +19,6 @@ training:
 
 wandb:
   project: "WIMU mamba-music-generation"
+
+models:
+  save_path: models
