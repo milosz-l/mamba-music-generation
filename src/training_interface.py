@@ -23,7 +23,7 @@ class LighteningMamba(pl.LightningModule):
             num_embeddings=config.model.vocab_size,
             embedding_dim=config.model.model_dimension
         )
-        self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataloader(config.data)
+        self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataloader(config)
 
         self.output_layer = nn.Linear(config.model.model_dimension, config.model.vocab_size)
 
