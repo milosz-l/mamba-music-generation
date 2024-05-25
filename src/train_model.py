@@ -27,11 +27,11 @@ def train_model(config: DictConfig):
     trainer = pl.Trainer(callbacks=callbacks, max_epochs=config.training.epochs, logger=wandb_logger)
     trainer.fit(interface_model)
 
-    # # Save the trained model with the same name as the wandb experiment
-    # model_path = Path(config.models.save_path)
-    # model_path.mkdir(parents=True, exist_ok=True)
-    # experiment_name = wandb.run.name
-    # torch.save(interface_model.model.state_dict(), model_path / f"{experiment_name}_model.pt")
+    # Save the trained model with the same name as the wandb experiment
+    model_path = Path(config.models.save_path)
+    model_path.mkdir(parents=True, exist_ok=True)
+    experiment_name = wandb.run.name
+    torch.save(interface_model.model.state_dict(), model_path / f"{experiment_name}_model.pt")
 
     wandb.finish()
 
