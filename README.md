@@ -42,7 +42,23 @@
     └── test_train_model.py         # test functions for train_model.py
 ```
 
-## Set up the environment
+## Set up the environemnt with TLDR bash script
+1. Install dependencies and download data:
+```bash
+bash vast_ai_setup.sh
+```
+
+2. Login to wandb:
+```bash
+wandb login
+```
+
+3. Test the environment:
+```bash
+python src/test_env.py
+```
+
+## Set up the environment - detailed instructions
 
 
 1. Install [Poetry](https://python-poetry.org/docs/#installation)

@@ -1,3 +1,5 @@
+*.ckpt
+models/
 wandb/
 WIMU mamba-music-generation/
 lightning_logs/
