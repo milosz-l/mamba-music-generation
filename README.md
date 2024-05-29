@@ -87,7 +87,16 @@ pip install mamba-ssm==1.2.0.post1
 ```
 
 In case the above does not work, please make sure you have cuda devel toolkit installed.
+## Before all commit
 
+To make shure that your code fulfill all necessary from yapf and pylint paste whi before all commits and correct them
+
+```bash
+./yapf-fix.sh
+```
+```bash
+./pylint.sh
+```
 ## Train model
 1. Download data:
 ```bash
