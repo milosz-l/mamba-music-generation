@@ -4,10 +4,7 @@ from torch.utils.data import random_split
 from pathlib import Path
 from omegaconf import DictConfig
 
-
-TOKENIZR_MAPPING = {
-    'remi': REMI
-}
+TOKENIZR_MAPPING = {'remi': REMI}
 
 
 def get_tokenized_dataloader(config: DictConfig):
@@ -15,7 +12,9 @@ def get_tokenized_dataloader(config: DictConfig):
     tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()]()
     dataset_path = Path(config.data.path) / config.data.dataset_name
     midi_paths = list(dataset_path.glob("**/*.mid*"))
-    tokenizer.train(vocab_size=config.model.vocab_size, files_paths=midi_paths,  model="BPE")
+    tokenizer.train(vocab_size=config.model.vocab_size,
+                    files_paths=midi_paths,
+                    model="BPE")
     tokenizer.save_params(dataset_path / "tokenizer.json")
 
     dataset = DatasetMIDI(
@@ -37,5 +36,6 @@ def get_tokenized_dataloader(config: DictConfig):
 
 def load_pretrained_tokenizer(config: DictConfig):
     dataset_path = Path(config.data.path) / config.data.dataset_name
-    tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()](params=dataset_path / "tokenizer.json")
+    tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()](
+        params=dataset_path / "tokenizer.json")
     return tokenizer

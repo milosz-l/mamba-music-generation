@@ -1,14 +1,13 @@
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 import pytorch_lightning as pl
 
+
 def get_callbacks(callback_config):
-    early_stop_callback = EarlyStopping(
-        monitor='val_loss',
-        min_delta=0.0,
-        patience=10,
-        verbose=False,
-        mode='min'
-    )
+    early_stop_callback = EarlyStopping(monitor='val_loss',
+                                        min_delta=0.0,
+                                        patience=10,
+                                        verbose=False,
+                                        mode='min')
 
     checkpoint_callback = ModelCheckpoint(
         filename='best-checkpoint',
@@ -25,4 +24,6 @@ def get_callbacks(callback_config):
         verbose=True,
     )
 
-    return [early_stop_callback, checkpoint_callback, periodic_checkpoint_callback]
+    return [
+        early_stop_callback, checkpoint_callback, periodic_checkpoint_callback
+    ]

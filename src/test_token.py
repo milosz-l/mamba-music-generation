@@ -10,7 +10,8 @@ def main(config: DictConfig):
     tokenizer = load_pretrained_tokenizer(config)
     print(train_dataset[0]['input_ids'].unsqueeze(0))
     print(tokenizer.is_trained)
-    export_to_wav(tokenizer, train_dataset[0]['input_ids'].unsqueeze(0), 'out.wav')
+    export_to_wav(tokenizer, train_dataset[0]['input_ids'].unsqueeze(0),
+                  'out.wav')
 
 
 if __name__ == "__main__":
