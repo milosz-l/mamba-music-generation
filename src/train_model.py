@@ -13,8 +13,8 @@ from omegaconf import DictConfig
 
 from pytorch_lightning.loggers import WandbLogger
 import pytorch_lightning as pl
-from src.training_interface import LighteningMamba
-from src.callbacks import get_callbacks
+from training_interface import LighteningMamba
+from callbacks import get_callbacks
 import wandb
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"

@@ -1,8 +1,8 @@
 import hydra
 from omegaconf import DictConfig
 
-from src.tokenizer import get_tokenized_dataloader, load_pretrained_tokenizer
-from src.utils import export_to_wav
+from tokenizer import get_tokenized_dataloader, load_pretrained_tokenizer
+from utils import export_to_wav
 
 
 # pylint: disable = unused-variable

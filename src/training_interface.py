@@ -6,8 +6,8 @@ from omegaconf import DictConfig
 
 import pytorch_lightning as pl
 
-from src.tokenizer import get_tokenized_dataloader
-from src.mamba_model import get_mamba_model
+from tokenizer import get_tokenized_dataloader
+from mamba_model import get_mamba_model
 
 
 # pylint: disable=arguments-differ
