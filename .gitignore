@@ -1,4 +1,7 @@
 wandb/
+WIMU mamba-music-generation/
+lightning_logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -103,3 +106,6 @@ data/*/*
 notebooks/*
 !notebooks/.gitkeep
 venv*/
+
+# poetry
+poetry.lock
