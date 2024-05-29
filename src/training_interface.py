@@ -1,17 +1,20 @@
 import torch
-import torch.nn as nn
+from torch import nn
+from torch.utils.data import DataLoader
+
 from omegaconf import DictConfig
 
 import pytorch_lightning as pl
-from tokenizer import get_tokenized_dataloader
-from mamba_model import get_mamba_model
-from torch.utils.data import DataLoader
+
+from src.tokenizer import get_tokenized_dataloader
+from src.mamba_model import get_mamba_model
 
 
+# pylint: disable=arguments-differ
 class LighteningMamba(pl.LightningModule):
 
     def __init__(self, config: DictConfig):
-        super(LighteningMamba, self).__init__()
+        super().__init__()
         self.config = config
         self.num_workers = config.training.num_workers
         self.batch_size = config.training.batch_size
@@ -26,15 +29,16 @@ class LighteningMamba(pl.LightningModule):
 
         self.save_hyperparameters(ignore=['model'])
 
-    def forward(self, input_ids, attention_mask=None):
+    def forward(self, input_ids):
         return self.model(input_ids)
 
-    def predict(self, input_ids, attention_mask=None):
+    def predict(self, input_ids):
         return self.model(input_ids)
 
+    # pylint: disable = unused-argument
     def training_step(self, batch, batch_idx):
-        input_ids, attention_mask = batch['input_ids'], batch['attention_mask']
-        outputs = self(input_ids, attention_mask)
+        input_ids, _ = batch['input_ids'], batch['attention_mask']
+        outputs = self(input_ids)
         loss = self.loss_function(outputs.transpose(1, 2), input_ids)
 
         self.log('train_loss',
@@ -45,9 +49,10 @@ class LighteningMamba(pl.LightningModule):
                  logger=True)
         return loss
 
+    # pylint: disable = unused-argument
     def validation_step(self, batch, batch_idx):
-        input_ids, attention_mask = batch['input_ids'], batch['attention_mask']
-        outputs = self(input_ids, attention_mask)
+        input_ids, _ = batch['input_ids'], batch['attention_mask']
+        outputs = self(input_ids)
         loss = self.loss_function(outputs.transpose(1, 2), input_ids)
 
         self.log('val_loss',

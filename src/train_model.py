@@ -4,16 +4,18 @@ This is the demo code that uses hydra to access the parameters in under the dire
 Author: Khuyen Tran
 """
 import os
+from pathlib import Path
 
 import hydra
 import torch
+
 from omegaconf import DictConfig
-from training_interface import LighteningMamba
-import pytorch_lightning as pl
+
 from pytorch_lightning.loggers import WandbLogger
+import pytorch_lightning as pl
+from src.training_interface import LighteningMamba
+from src.callbacks import get_callbacks
 import wandb
-from callbacks import get_callbacks
-from pathlib import Path
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
@@ -25,7 +27,7 @@ def train_model(config: DictConfig):
 
     torch.set_float32_matmul_precision('medium')
 
-    callbacks = get_callbacks(config.training.callbacks)
+    callbacks = get_callbacks()
 
     interface_model = LighteningMamba(config)
     trainer = pl.Trainer(callbacks=callbacks,
@@ -44,4 +46,4 @@ def train_model(config: DictConfig):
 
 
 if __name__ == "__main__":
-    train_model()
+    train_model()  # pylint: disable=no-value-for-parameter

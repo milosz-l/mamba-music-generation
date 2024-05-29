@@ -1,18 +1,13 @@
-from omegaconf import DictConfig
-from functools import partial
 import math
+from functools import partial
+from omegaconf import DictConfig
 
 import torch
-import torch.nn as nn
+from torch import nn
 
 from mamba_ssm.models.config_mamba import MambaConfig
 from mamba_ssm.models.mixer_seq_simple import MixerModel
 from mamba_ssm.utils.generation import GenerationMixin
-
-try:
-    from mamba_ssm.ops.triton.layernorm import RMSNorm, layer_norm_fn, rms_norm_fn
-except ImportError:
-    RMSNorm, layer_norm_fn, rms_norm_fn = None, None, None
 
 
 def get_mamba_model(config: DictConfig):
@@ -125,17 +120,12 @@ class MambaMusicHead(nn.Module, GenerationMixin):
                                                       dtype=dtype,
                                                       **kwargs)
 
-    def forward(self,
-                input_ids,
-                position_ids=None,
-                inference_params=None,
-                num_last_tokens=0):
+    def forward(self, input_ids):
         """
         "position_ids" is just to be compatible with Transformer generation. We don't use it.
         num_last_tokens: if > 0, only return the logits for the last n tokens
         """
-        hidden_states = self.backbone(input_ids,
-                                      inference_params=inference_params)
+        hidden_states = self.backbone(input_ids, inference_params=None)
         # if num_last_tokens > 0:
         #     hidden_states = hidden_states[:, -num_last_tokens:]
         return self.lm_head(hidden_states)

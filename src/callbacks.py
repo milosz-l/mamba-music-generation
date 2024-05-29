@@ -1,8 +1,7 @@
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-import pytorch_lightning as pl
 
 
-def get_callbacks(callback_config):
+def get_callbacks():
     early_stop_callback = EarlyStopping(monitor='val_loss',
                                         min_delta=0.0,
                                         patience=10,

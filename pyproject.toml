@@ -19,6 +19,7 @@ causal-conv1d = "==1.2.*"
 torchvision = "0.16.1"
 mamba-ssm = "1.2.0.post1"
 yapf = "^0.40.2"
+pylint = "^3.2.2"
 
 [tool.poetry.dev-dependencies]
 pdoc3 = "^0.10.0"

@@ -1,7 +1,8 @@
-from miditok import REMI, TokenizerConfig
+from pathlib import Path
+
+from miditok import REMI
 from miditok.pytorch_data import DatasetMIDI, DataCollator
 from torch.utils.data import random_split
-from pathlib import Path
 from omegaconf import DictConfig
 
 TOKENIZR_MAPPING = {'remi': REMI}
