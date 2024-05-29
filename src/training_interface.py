@@ -22,7 +22,7 @@ class LighteningMamba(pl.LightningModule):
         self.loss_function = nn.CrossEntropyLoss()
         self.model = get_mamba_model(config.model)
         self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataloader(
-            config.data)
+            config)
 
         self.save_hyperparameters(ignore=['model'])
 
