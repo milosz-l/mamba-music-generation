@@ -168,6 +168,16 @@ To auto-generate API document for your project, run:
 make docs
 ```
 
+# Inference
+After training, you can fined models in `models/` directory.
+
+1. Choose a model from `models/` directory.
+2. Make sure the config in `config/mamba_model.yaml` is the same as the model you want to use.
+3. Run the inference:
+```bash
+python src/run_inference.py
+```
+
 
 # WIMU projekt
 ## Design proposal

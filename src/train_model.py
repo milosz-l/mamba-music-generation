@@ -35,7 +35,7 @@ def train_model(config: DictConfig):
                          logger=wandb_logger)
     trainer.fit(interface_model)
 
-    # Save the trained model with the same name as the wandb experiment
+    # Save the trained model with the same name as the wandb experiment locally after whole training (wandb logging is handled in callback)
     model_path = Path(config.models.save_path)
     model_path.mkdir(parents=True, exist_ok=True)
     experiment_name = wandb.run.name
