@@ -112,3 +112,6 @@ venv*/
 
 # poetry
 poetry.lock
+
+
+!logs/important/*.log
