@@ -175,7 +175,7 @@ After training, you can fined models in `models/` directory.
 2. Make sure the config in `config/mamba_model.yaml` is the same as the model you want to use.
 3. Run the inference:
 ```bash
-python src/run_inference.py > "logs/inference_output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
+python src/run_generate.py > "logs/generate_output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
 ```
 
 
