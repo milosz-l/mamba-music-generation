@@ -57,6 +57,11 @@ def _init_weights(
                     p /= math.sqrt(n_residuals_per_layer * n_layer)
 
 
+class LogitsWrapper:
+    def __init__(self, logits):
+        self.logits = logits
+
+
 class MambaMusicHead(nn.Module, GenerationMixin):
 
     def __init__(
@@ -120,7 +125,7 @@ class MambaMusicHead(nn.Module, GenerationMixin):
                                                       dtype=dtype,
                                                       **kwargs)
 
-    def forward(self, input_ids):
+    def forward(self, input_ids, **kwargs):
         """
         "position_ids" is just to be compatible with Transformer generation. We don't use it.
         num_last_tokens: if > 0, only return the logits for the last n tokens
@@ -128,7 +133,9 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         hidden_states = self.backbone(input_ids, inference_params=None)
         # if num_last_tokens > 0:
         #     hidden_states = hidden_states[:, -num_last_tokens:]
-        return self.lm_head(hidden_states)
+        logits = self.lm_head(hidden_states)
+        return LogitsWrapper(logits)
+
 
     # @classmethod
     # def from_pretrained(cls, pretrained_model_name, device=None, dtype=None, **kwargs):
