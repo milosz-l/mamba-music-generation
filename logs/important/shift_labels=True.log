@@ -1,0 +1,110 @@
+/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/miditok/midi_tokenizer.py:136: UserWarning: The special token PAD_None is present twice in your configuration. Skipping its duplicated occurrence.
+  self.config = TokenizerConfig()
+
+
+
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
+wandb: Currently logged in as: milosz-l (wut-zzsn). Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.17.0
+wandb: Run data is saved locally in ./wandb/run-20240602_130740-8oorebk8
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run pretty-dawn-21
+wandb: ⭐️ View project at https://wandb.ai/wut-zzsn/WIMU%20mamba-music-generation
+wandb: 🚀 View run at https://wandb.ai/wut-zzsn/WIMU%20mamba-music-generation/runs/8oorebk8
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name          | Type             | Params
+---------------------------------------------------
+0 | loss_function | CrossEntropyLoss | 0     
+1 | model         | MambaMusicHead   | 11.3 M
+---------------------------------------------------
+11.3 M    Trainable params
+0         Non-trainable params
+11.3 M    Total params
+45.212    Total estimated model params size (MB)
+Sanity Checking: |          | 0/? [00:00<?, ?it/s]Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/workspace/mamba-music-generation/src/train_model.py", line 36, in train_model
+    trainer.fit(interface_model)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/trainer/trainer.py", line 544, in fit
+    call._call_and_handle_interrupt(
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/trainer/call.py", line 44, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/trainer/trainer.py", line 580, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/trainer/trainer.py", line 987, in _run
+    results = self._run_stage()
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/trainer/trainer.py", line 1031, in _run_stage
+    self._run_sanity_check()
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/trainer/trainer.py", line 1060, in _run_sanity_check
+    val_loop.run()
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/loops/utilities.py", line 182, in _decorator
+    return loop_run(self, *args, **kwargs)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 128, in run
+    batch, batch_idx, dataloader_idx = next(data_fetcher)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/loops/fetchers.py", line 133, in __next__
+    batch = super().__next__()
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/loops/fetchers.py", line 60, in __next__
+    batch = next(self.iterator)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/utilities/combined_loader.py", line 341, in __next__
+    out = next(self._iterator)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/pytorch_lightning/utilities/combined_loader.py", line 142, in __next__
+    out = next(self.iterators[0])
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1345, in _next_data
+    return self._process_data(data)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1371, in _process_data
+    data.reraise()
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/torch/_utils.py", line 694, in reraise
+    raise exception
+TypeError: Caught TypeError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 308, in _worker_loop
+    data = fetcher.fetch(index)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 54, in fetch
+    return self.collate_fn(data)
+  File "/root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/lib/python3.10/site-packages/miditok/pytorch_data/collators.py", line 100, in __call__
+    if y[0].dim() > 0:
+TypeError: 'NoneType' object is not subscriptable
+
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+wandb: - 0.003 MB of 0.003 MB uploadedwandb: \ 0.003 MB of 0.003 MB uploadedwandb: | 0.003 MB of 0.003 MB uploadedwandb: / 0.006 MB of 0.015 MB uploaded (0.002 MB deduped)wandb: - 0.015 MB of 0.015 MB uploaded (0.002 MB deduped)wandb: 🚀 View run pretty-dawn-21 at: https://wandb.ai/wut-zzsn/WIMU%20mamba-music-generation/runs/8oorebk8
+wandb: ⭐️ View project at: https://wandb.ai/wut-zzsn/WIMU%20mamba-music-generation
+wandb: Synced 5 W&B file(s), 0 media file(s), 2 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20240602_130740-8oorebk8/logs
+                                                  nanobind: leaked 3 instances!
+ - leaked instance 0x7fa0e5556048 of type "Second"
+ - leaked instance 0x7fa0e5555f68 of type "Quarter"
+ - leaked instance 0x7fa0e5555f28 of type "Tick"
+nanobind: leaked 59 types!
+ - leaked type "symusic.core.PedalTickList"
+ - leaked type "symusic.core.TempoSecond"
+ - leaked type "symusic.core.Quarter"
+ - leaked type "symusic.core.PitchBendTickList"
+ - leaked type "symusic.core.PedalTick"
+ - leaked type "symusic.core.KeySignatureSecond"
+ - leaked type "symusic.core.ScoreSecond"
+ - leaked type "symusic.core.TempoTickList"
+ - leaked type "symusic.core.TimeSignatureTick"
+ - leaked type "symusic.core.TrackQuarter"
+ - leaked type "symusic.core.KeySignatureQuarter"
+ - ... skipped remainder
+nanobind: leaked 1432 functions!
+ - leaked function "__getstate__"
+ - leaked function "__copy__"
+ - leaked function "__deepcopy__"
+ - leaked function "dump_midi"
+ - leaked function "dump_abc"
+ - leaked function "__setstate__"
+ - leaked function "__getitem__"
+ - leaked function "resample"
+ - leaked function "__setstate__"
+ - leaked function "insert"
+ - leaked function "__init__"
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.

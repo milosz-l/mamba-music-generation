@@ -25,7 +25,7 @@ def get_tokenized_dataloader(config: DictConfig):
         bos_token_id=tokenizer["BOS_None"],
         eos_token_id=tokenizer["EOS_None"],
     )
-    collator = DataCollator(tokenizer.pad_token_id, shift_labels=False)
+    collator = DataCollator(tokenizer.pad_token_id, shift_labels=True)
 
     dataset_size = len(dataset)
     train_size = int(config.data.train_split * dataset_size)
