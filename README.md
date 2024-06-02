@@ -55,7 +55,7 @@ wandb login
 
 3. Test the environment:
 ```bash
-python src/test_env.py
+python tests/test_env.py
 ```
 
 ## Set up the environment - detailed instructions
@@ -91,7 +91,7 @@ wandb login
 
 After these commands paste:
 ```bash
-python src/test_env.py
+python tests/test_env.py
 ```
 
 If it won't work try with installing following dependencies through pip:
@@ -175,7 +175,7 @@ After training, you can fined models in `models/` directory.
 2. Make sure the config in `config/mamba_model.yaml` is the same as the model you want to use.
 3. Run the inference:
 ```bash
-python src/run_inference.py
+python src/run_inference.py > "logs/inference_output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
 ```
 
 

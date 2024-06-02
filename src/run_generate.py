@@ -16,35 +16,6 @@ def load_model(model_path, config):
     model.eval()
     return model.to('cuda')  # Move model to GPU
 
-def generate_sequence(model, input_ids, max_length, temperature=0.8, top_k=50):
-    model.eval()
-    generated = input_ids.to('cuda')
-    for _ in range(max_length - input_ids.size(1)):
-        with torch.no_grad():
-            print(f"Generated: {generated}")
-            output = model(generated)
-            # print output, output shape, output length, top 5 max and min values, etc.
-            print(f"Output: {output}")
-            print(f"Output shape: {output.shape}")
-            print(f"Output length: {output.size(1)}")
-            print(f"Output max value: {torch.max(output)}")
-            print(f"Output min value: {torch.min(output)}")
-            next_token_logits = output[:, -1, :] / temperature
-            filtered_logits = top_k_filtering(next_token_logits, top_k=top_k)
-            next_token = torch.multinomial(torch.softmax(filtered_logits, dim=-1), num_samples=1)
-            generated = torch.cat((generated, next_token), dim=1)
-            print(f"Next token logits: {next_token_logits}")
-            print(f"Filtered logits: {filtered_logits}")
-            print(f"Next token: {next_token}")
-    return generated
-
-def top_k_filtering(logits, top_k=50):
-    if top_k > 0:
-        values, indices = torch.topk(logits, top_k)
-        min_values = values[:, -1, None]
-        logits = torch.where(logits < min_values, torch.full_like(logits, float('-inf')), logits)
-    return logits
-
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def main(config: DictConfig):
     if config.inference.wandb_run_id:
@@ -71,7 +42,15 @@ def main(config: DictConfig):
     max_length = config.inference.max_length
     temperature = config.inference.get('temperature', 0.8)
     top_k = config.inference.get('top_k', 50)
-    generated_sequence = generate_sequence(model, input_ids, max_length, temperature, top_k)
+    
+    # Use model.generate for sequence generation
+    generated_sequence = model.generate(
+        input_ids=input_ids.to('cuda'),
+        max_length=max_length,
+        temperature=temperature,
+        top_k=top_k
+    )
+    
     print(f"generated_sequence: {generated_sequence}")
     print(f"generated_sequence.shape: {generated_sequence.shape}")
     
