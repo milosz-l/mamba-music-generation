@@ -11,19 +11,44 @@ from utils import export_to_wav
 from tokenizer import load_pretrained_tokenizer  # Import the tokenizer
 
 def load_model(model_path, config):
+    checkpoint = torch.load(model_path)
+    
+    # Extract the state_dict from the checkpoint
+    if 'state_dict' in checkpoint:
+        state_dict = checkpoint['state_dict']
+    else:
+        state_dict = checkpoint
+    
+    # Remove 'model.' prefix from state_dict keys if present
+    new_state_dict = {}
+    for k, v in state_dict.items():
+        if k.startswith('model.'):
+            new_state_dict[k[6:]] = v  # Remove 'model.' prefix
+        else:
+            new_state_dict[k] = v
+    
     model = get_mamba_model(config.model)
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(new_state_dict)
     model.eval()
     return model.to('cuda')  # Move model to GPU
 
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def main(config: DictConfig):
-    if config.inference.wandb_run_id:
-        # TODO: test it
-        print("taking model from wandb_run_id")
+    if config.inference.wandb_model_full_name:
+        print(f"taking this model from wandb: {config.inference.wandb_model_full_name}")
         # Initialize wandb and download the model file
-        wandb.init(project=config.wandb.project, id=config.inference.wandb_run_id, resume="allow")
-        model_path = wandb.restore('model.pt').name
+        # run = wandb.init(project=config.wandb.project, resume="allow")
+        # artifact = run.use_artifact(config.inference.wandb_model_full_name, type='model')
+        # artifact_dir = artifact.download()
+        
+        # Use wandb.Api to fetch the model artifact
+        api = wandb.Api()
+        artifact = api.artifact(config.inference.wandb_model_full_name)
+
+        download_dir = config.models.save_path
+        model_dir = artifact.download(root=download_dir)
+
+        model_path = os.path.join(model_dir, 'model.ckpt')
     else:
         print(f"taking model from path, model: {config.inference.model_path}")
         model_path = config.inference.model_path
@@ -56,8 +81,8 @@ def main(config: DictConfig):
     
     # Export the output to a .wav file
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    model_name = model_path.split("-")[-2]
-    wav_filename = f'output_{model_name}_{timestamp}.wav'
+    model_name = model_path.split("-")[-1]
+    wav_filename = f'output_{timestamp}_{model_path}.wav'
 
     # Load the tokenizer
     tokenizer = load_pretrained_tokenizer(config)
