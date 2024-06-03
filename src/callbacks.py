@@ -9,6 +9,7 @@ class WandbCleanupCallback(Callback):
         self.interval = config.wandb.cleanup.run_cleanup_every_epochs
 
     def on_epoch_end(self, trainer, pl_module):
+        print("running wandb cleanup on epoch end")
         if trainer.current_epoch % self.interval == 0:
             delete_models_witout_tags_in_wandb(config=self.config)
 
@@ -17,11 +18,11 @@ def get_callbacks(config: DictConfig):
     early_stop_callback = EarlyStopping(monitor='val_loss',
                                         min_delta=0.0,
                                         patience=config.training.callbacks.patience,
-                                        verbose=False,
+                                        verbose=True,
                                         mode='min')
 
     checkpoint_callback = ModelCheckpoint(
-        filename='best-checkpoint-{epoch:02d}-{val_loss:.2f}',
+        filename='best-checkpoint',
         save_top_k=1,
         verbose=True,
         monitor='val_loss',
