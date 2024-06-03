@@ -57,6 +57,12 @@ def _init_weights(
                     p /= math.sqrt(n_residuals_per_layer * n_layer)
 
 
+# class LogitsWrapper(torch.Tensor):
+#     def __init__(self, logits):
+#         super().__init__()
+#         self.logits = logits
+
+
 class MambaMusicHead(nn.Module, GenerationMixin):
 
     def __init__(
@@ -120,7 +126,7 @@ class MambaMusicHead(nn.Module, GenerationMixin):
                                                       dtype=dtype,
                                                       **kwargs)
 
-    def forward(self, input_ids):
+    def forward(self, input_ids, **kwargs):
         """
         "position_ids" is just to be compatible with Transformer generation. We don't use it.
         num_last_tokens: if > 0, only return the logits for the last n tokens

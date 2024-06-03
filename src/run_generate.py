@@ -25,7 +25,7 @@ def main(config: DictConfig):
         wandb.init(project=config.wandb.project, id=config.inference.wandb_run_id, resume="allow")
         model_path = wandb.restore('model.pt').name
     else:
-        print("taking model from path")
+        print(f"taking model from path, model: {config.inference.model_path}")
         model_path = config.inference.model_path
 
     model = load_model(model_path, config)
