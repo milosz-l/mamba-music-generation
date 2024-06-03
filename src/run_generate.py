@@ -81,8 +81,7 @@ def main(config: DictConfig):
     
     # Export the output to a .wav file
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    model_name = model_path.split("-")[-1]
-    wav_filename = f'output_{timestamp}_{model_path}.wav'
+    wav_filename = f'output_{timestamp}.wav'
 
     # Load the tokenizer
     tokenizer = load_pretrained_tokenizer(config)

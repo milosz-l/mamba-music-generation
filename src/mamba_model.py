@@ -57,10 +57,10 @@ def _init_weights(
                     p /= math.sqrt(n_residuals_per_layer * n_layer)
 
 
-# class LogitsWrapper(torch.Tensor):
-#     def __init__(self, logits):
-#         super().__init__()
-#         self.logits = logits
+class LogitsWrapper(torch.Tensor):
+    def __init__(self, logits):
+        super().__init__()
+        self.logits = logits
 
 
 class MambaMusicHead(nn.Module, GenerationMixin):
@@ -134,7 +134,8 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         hidden_states = self.backbone(input_ids, inference_params=None)
         # if num_last_tokens > 0:
         #     hidden_states = hidden_states[:, -num_last_tokens:]
-        return self.lm_head(hidden_states)
+        return LogitsWrapper(self.lm_head(hidden_states))
+        # return self.lm_head(hidden_states)
 
     # @classmethod
     # def from_pretrained(cls, pretrained_model_name, device=None, dtype=None, **kwargs):
