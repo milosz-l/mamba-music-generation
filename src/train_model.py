@@ -16,6 +16,7 @@ import pytorch_lightning as pl
 from training_interface import LighteningMamba
 from callbacks import get_callbacks
 import wandb
+from wandb_cleanup import cleanup_wandb_local_cache
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
@@ -28,7 +29,7 @@ def train_model(config: DictConfig):
     torch.cuda.empty_cache()
     torch.set_float32_matmul_precision('medium')
 
-    callbacks = get_callbacks()
+    callbacks = get_callbacks(config)
 
     interface_model = LighteningMamba(config)
     trainer = pl.Trainer(callbacks=callbacks,
@@ -37,14 +38,15 @@ def train_model(config: DictConfig):
     trainer.fit(interface_model)
 
     # Save the trained model with the same name as the wandb experiment locally after whole training (wandb logging is handled in callback)
-    model_path = Path(config.models.save_path)
-    model_path.mkdir(parents=True, exist_ok=True)
-    experiment_name = wandb.run.name
-    torch.save(interface_model.model.state_dict(),
-               model_path / f"{experiment_name}_model.pt")
+    # model_path = Path(config.models.save_path)
+    # model_path.mkdir(parents=True, exist_ok=True)
+    # experiment_name = wandb.run.name
+    # torch.save(interface_model.model.state_dict(),
+    #            model_path / f"{experiment_name}_model.pt")
 
     wandb.finish()
 
+    cleanup_wandb_local_cache()
 
 if __name__ == "__main__":
     train_model()  # pylint: disable=no-value-for-parameter
