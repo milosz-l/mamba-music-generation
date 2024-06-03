@@ -1,11 +1,24 @@
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
+from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, Callback
+from wandb_cleanup import delete_models_witout_tags_in_wandb
+from omegaconf import DictConfig
+
+class WandbCleanupCallback(Callback):
+    def __init__(self, config: DictConfig):
+        super().__init__()
+        self.config = config
+        self.interval = config.wandb.cleanup.run_cleanup_every_epochs
+
+    def on_epoch_end(self, trainer, pl_module):
+        print("running wandb cleanup on epoch end")
+        if trainer.current_epoch % self.interval == 0:
+            delete_models_witout_tags_in_wandb(config=self.config)
 
 
-def get_callbacks():
+def get_callbacks(config: DictConfig):
     early_stop_callback = EarlyStopping(monitor='val_loss',
                                         min_delta=0.0,
-                                        patience=10,
-                                        verbose=False,
+                                        patience=config.training.callbacks.patience,
+                                        verbose=True,
                                         mode='min')
 
     checkpoint_callback = ModelCheckpoint(
@@ -16,13 +29,15 @@ def get_callbacks():
         mode='min',
     )
 
-    periodic_checkpoint_callback = ModelCheckpoint(
-        filename='checkpoint-{epoch:02d}-{val_loss:.2f}',
-        save_top_k=-1,  # Save all checkpoints
-        every_n_epochs=5,  # Save every 5 epochs
-        verbose=True,
-    )
+    wandb_cleanup_callback = WandbCleanupCallback(config)
+
+    # periodic_checkpoint_callback = ModelCheckpoint(
+    #     filename='checkpoint-{epoch:02d}-{val_loss:.2f}',
+    #     save_top_k=-1,  # Save all checkpoints
+    #     every_n_epochs=5,  # Save every 5 epochs
+    #     verbose=True,
+    # )
 
     return [
-        early_stop_callback, checkpoint_callback, periodic_checkpoint_callback
+        early_stop_callback, checkpoint_callback, wandb_cleanup_callback  #, periodic_checkpoint_callback
     ]

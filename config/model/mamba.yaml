@@ -1,6 +1,6 @@
 name: mamba
-model_dimension: 128
-n_layer: 64
+model_dimension: 1024
+n_layer: 48
 vocab_size: 30000
 rms_norm: True
 residual_in_fp32: True

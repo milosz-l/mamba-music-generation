@@ -1,0 +1,21 @@
+    1  . /root/.cache/pypoetry/virtualenvs/mamba-music-generation-CHSTgNNY-py3.10/bin/activate
+    2  pip install --upgrade pip setuptools wheel
+    3  poetry install
+    4  pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+    5  pip install causal_conv1d==1.2.*
+    6  python src/download_data.py
+    7  python tests/test_env.py 
+    8  poetry install
+    9  pip install --upgrade pip setuptools wheel
+   10  pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+   11  pip install causal_conv1d==1.2.*
+   12  pip install mamba-ssm==1.2.0.post1
+   13  pip install --upgrade pip setuptools wheel
+   14  poetry install
+   15  pip install packaging
+   16  pip install --upgrade pip setuptools wheel
+   17  poetry install
+   18  pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+   19  pip install causal_conv1d==1.2.*
+   20  \pip install mamba-ssm==1.2.0.post1
+   21  python tests/test_env.py 
