@@ -31,7 +31,7 @@ inference:
   wandb_model_full_name: "" # example: "wut-zzsn/WIMU mamba-music-generation/model-mn6cowxw:v4"
   model_path: "models/model-mn6cowxw:v4.ckpt" # optional, if you want to load model that is not in wandb fill this and leave wandb_model_full_name empty
   input_length: 1   # Example length
-  # input_ids: [1]      # list of input ids (optional, if not provided, random input will be generated)
+  input_ids: [1]      # list of input ids (optional, if not provided, random input will be generated)
   max_length: 100
-  temperature: 0.01
+  temperature: 0.9
   top_k: 50
