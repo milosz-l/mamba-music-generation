@@ -134,6 +134,8 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         hidden_states = self.backbone(input_ids, inference_params=None)
         # if num_last_tokens > 0:
         #     hidden_states = hidden_states[:, -num_last_tokens:]
+
+        # NOTE: use the first return (the line below) during inference and the second return (the line two lines below) during training, TODO: fix this code so there is no need for manual change
         return LogitsWrapper(self.lm_head(hidden_states))
         # return self.lm_head(hidden_states)
 
