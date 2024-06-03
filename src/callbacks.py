@@ -9,22 +9,20 @@ def get_callbacks():
                                         mode='min')
 
     checkpoint_callback = ModelCheckpoint(
-        filename='best-checkpoint',
+        filename='best-checkpoint-{epoch:02d}-{val_loss:.2f}',
         save_top_k=1,
         verbose=True,
         monitor='val_loss',
         mode='min',
     )
 
-    periodic_checkpoint_callback = ModelCheckpoint(
-        filename='best-checkpoint-{epoch:02d}-{val_loss:.2f}',
-        save_top_k=2,  # Save all checkpoints
-        # every_n_epochs=5,  # Save every 5 epochs
-        verbose=True,
-        monitor='val_loss',
-        mode='min',
-    )
+    # periodic_checkpoint_callback = ModelCheckpoint(
+    #     filename='checkpoint-{epoch:02d}-{val_loss:.2f}',
+    #     save_top_k=-1,  # Save all checkpoints
+    #     every_n_epochs=5,  # Save every 5 epochs
+    #     verbose=True,
+    # )
 
     return [
-        early_stop_callback, checkpoint_callback, periodic_checkpoint_callback
+        early_stop_callback, checkpoint_callback    #, periodic_checkpoint_callback
     ]
