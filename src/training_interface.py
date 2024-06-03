@@ -82,13 +82,15 @@ class LighteningMamba(pl.LightningModule):
         return DataLoader(self.train_dataset,
                           batch_size=self.config.training.batch_size,
                           collate_fn=self.collator,
-                          num_workers=self.num_workers)
+                          num_workers=self.num_workers,
+                          shuffle=True)
 
     def val_dataloader(self):
         return DataLoader(self.val_dataset,
                           batch_size=self.config.training.batch_size,
                           collate_fn=self.collator,
-                          num_workers=self.num_workers)
+                          num_workers=self.num_workers,
+                          shuffle=False)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)

@@ -136,8 +136,8 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         #     hidden_states = hidden_states[:, -num_last_tokens:]
 
         # NOTE: use the first return (the line below) during inference and the second return (the line two lines below) during training, TODO: fix this code so there is no need for manual change
-        return LogitsWrapper(self.lm_head(hidden_states))
-        # return self.lm_head(hidden_states)
+        # return LogitsWrapper(self.lm_head(hidden_states))
+        return self.lm_head(hidden_states)
 
     # @classmethod
     # def from_pretrained(cls, pretrained_model_name, device=None, dtype=None, **kwargs):
