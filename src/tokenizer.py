@@ -10,13 +10,19 @@ TOKENIZR_MAPPING = {'remi': REMI}
 
 def get_tokenized_dataloader(config: DictConfig):
 
-    tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()]()
     dataset_path = Path(config.data.path) / config.data.dataset_name
+    tokenizer_path = dataset_path / config.data.tokenizer / "params.json"
+
     midi_paths = list(dataset_path.glob("**/*.mid*"))
-    tokenizer.train(vocab_size=config.model.vocab_size,
-                    files_paths=midi_paths,
-                    model="BPE")
-    tokenizer.save_params(dataset_path / "tokenizer.json")
+    if not tokenizer_path.exists():
+        tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()]()
+        tokenizer.train(vocab_size=config.model.vocab_size,
+                        files_paths=midi_paths,
+                        model="BPE")
+        tokenizer.save_params(tokenizer_path)
+    else:
+        tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()](params=tokenizer_path)
+
 
     dataset = DatasetMIDI(
         files_paths=midi_paths,
@@ -37,6 +43,7 @@ def get_tokenized_dataloader(config: DictConfig):
 
 def load_pretrained_tokenizer(config: DictConfig):
     dataset_path = Path(config.data.path) / config.data.dataset_name
-    tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()](
-        params=dataset_path / "tokenizer.json")
+    tokenizer_path = dataset_path / config.data.tokenizer / "params.json"
+
+    tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.lower()](params=tokenizer_path)
     return tokenizer
