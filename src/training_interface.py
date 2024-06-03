@@ -37,9 +37,17 @@ class LighteningMamba(pl.LightningModule):
 
     # pylint: disable = unused-argument
     def training_step(self, batch, batch_idx):
+        # print(f"batch in training_step: {batch}")
         input_ids, _ = batch['input_ids'], batch['attention_mask']
         outputs = self(input_ids)
-        loss = self.loss_function(outputs.transpose(1, 2), input_ids)
+        labels = batch['labels']
+        loss = self.loss_function(outputs.transpose(1, 2), labels)
+        # debug loss
+        # print(f"input_ids: {input_ids}")
+        # print(f"input_ids.shape: {input_ids.shape}")
+        # print(f"outputs: {outputs}")
+        # print(f"outputs.shape: {outputs.shape}")
+        # print(f"loss: {loss}")
 
         self.log('train_loss',
                  loss,
@@ -53,7 +61,8 @@ class LighteningMamba(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         input_ids, _ = batch['input_ids'], batch['attention_mask']
         outputs = self(input_ids)
-        loss = self.loss_function(outputs.transpose(1, 2), input_ids)
+        labels = batch['labels']
+        loss = self.loss_function(outputs.transpose(1, 2), labels)
 
         self.log('val_loss',
                  loss,
