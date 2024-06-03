@@ -17,10 +17,12 @@ def get_callbacks():
     )
 
     periodic_checkpoint_callback = ModelCheckpoint(
-        filename='checkpoint-{epoch:02d}-{val_loss:.2f}',
-        save_top_k=-1,  # Save all checkpoints
-        every_n_epochs=5,  # Save every 5 epochs
+        filename='best-checkpoint-{epoch:02d}-{val_loss:.2f}',
+        save_top_k=2,  # Save all checkpoints
+        # every_n_epochs=5,  # Save every 5 epochs
         verbose=True,
+        monitor='val_loss',
+        mode='min',
     )
 
     return [
