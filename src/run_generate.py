@@ -10,7 +10,7 @@ from datetime import datetime
 from utils import export_to_wav
 from tokenizer import load_pretrained_tokenizer  # Import the tokenizer
 
-def load_model(model_path, config):
+def load_model(model_path, config, inference_mode=True):
     checkpoint = torch.load(model_path)
     
     # Extract the state_dict from the checkpoint
@@ -30,6 +30,7 @@ def load_model(model_path, config):
     model = get_mamba_model(config.model)
     model.load_state_dict(new_state_dict)
     model.eval()
+    model.inference_mode = inference_mode
     return model.to('cuda')  # Move model to GPU
 
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")

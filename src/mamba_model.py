@@ -71,6 +71,7 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         initializer_cfg=None,
         device=None,
         dtype=None,
+        inference_mode=False
     ) -> None:
         self.config = config
         d_model = config.d_model
@@ -82,6 +83,7 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         fused_add_norm = config.fused_add_norm
         pad_vocab_size_multiple = config.pad_vocab_size_multiple
         factory_kwargs = {"device": device, "dtype": dtype}
+        self.inference_mode = inference_mode
 
         super().__init__()
         if vocab_size % pad_vocab_size_multiple != 0:
@@ -135,11 +137,13 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         # if num_last_tokens > 0:
         #     hidden_states = hidden_states[:, -num_last_tokens:]
 
-        # NOTE: use the first return during training and the second return during inference
-        if self.training:
-            return self.lm_head(hidden_states)
+        # NOTE: use the first return during inference and the second return during training
+        if self.inference_mode:
+            return LogitsWrapper(self.lm_head(hidden_states))
+            
+        return self.lm_head(hidden_states)
         
-        return LogitsWrapper(self.lm_head(hidden_states))
+        
 
     # @classmethod
     # def from_pretrained(cls, pretrained_model_name, device=None, dtype=None, **kwargs):
