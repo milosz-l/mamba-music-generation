@@ -6,7 +6,7 @@ from omegaconf import DictConfig
 
 import pytorch_lightning as pl
 
-from tokenizer import get_tokenized_dataloader
+from tokenizer import get_tokenized_dataset
 from mamba_model import get_mamba_model
 
 
@@ -24,7 +24,7 @@ class LighteningMamba(pl.LightningModule):
 
         self.loss_function = nn.CrossEntropyLoss()
         self.model = get_mamba_model(config.model)
-        self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataloader(
+        self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataset(
             config)
 
         self.save_hyperparameters(ignore=['model'])

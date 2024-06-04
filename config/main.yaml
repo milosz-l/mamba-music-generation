@@ -5,8 +5,11 @@ defaults:
 data:
   path: data
   dataset_name: maestro
-  tokenizer: remi
+  tokenizer:
+    type: tsd  # remi | midiike, tsd, structured, cpword, octuple, mumidi, mmm
+    training_model: Unigram  # BPE, Unigram, WordPiece
   train_split: 0.8
+  max_seq_len: 1024
 
 training:
   num_workers: 4 # lower this setting in case of workers segmentation fault error

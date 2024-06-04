@@ -1,14 +1,14 @@
 import hydra
 from omegaconf import DictConfig
 
-from tokenizer import get_tokenized_dataloader, load_pretrained_tokenizer
-from utils import export_to_wav
+from src.tokenizer import get_tokenized_dataset, load_pretrained_tokenizer
+from src.utils import export_to_wav
 
 
 # pylint: disable = unused-variable
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def main(config: DictConfig):
-    train_dataset, val_dataset, collator = get_tokenized_dataloader(config)
+    train_dataset, val_dataset, collator = get_tokenized_dataset(config)
 
     # print first 10 and then random 20
     print ("First 10")
