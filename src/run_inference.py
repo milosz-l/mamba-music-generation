@@ -51,7 +51,7 @@ def main(config: DictConfig):
         # TODO: test it
         print("taking model from wandb_run_id")
         # Initialize wandb and download the model file
-        wandb.init(project=config.wandb.project, id=config.inference.wandb_run_id, resume="allow")
+        wandb.init(project=config.wandb.project, entity=config.wandb.entity, id=config.inference.wandb_run_id, resume="allow")
         model_path = wandb.restore('model.pt').name
     else:
         print("taking model from path")

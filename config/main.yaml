@@ -23,6 +23,7 @@ training:
 
 wandb:
   project: "WIMU mamba-music-generation"
+  entity: "wut-zzsn"
   cleanup:
     dry_run: False
     run_cleanup_every_epochs: 5

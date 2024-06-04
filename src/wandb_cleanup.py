@@ -15,8 +15,9 @@ def delete_models_witout_tags_in_wandb(config: DictConfig):
     set dry_run == False to delete...
     """
     project_name=config.wandb.project
+    entity = config.wandb.entity
     dry_run = config.wandb.cleanup.dry_run
-    api = wandb.Api(overrides={"project": project_name})
+    api = wandb.Api(overrides={"project": project_name, "entity": entity})
     project = api.project(project_name)
     for artifact_type in project.artifacts_types():
         for artifact_collection in artifact_type.collections():
