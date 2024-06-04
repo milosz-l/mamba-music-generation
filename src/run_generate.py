@@ -37,7 +37,7 @@ def main(config: DictConfig):
     if config.inference.wandb_model_full_name:
         print(f"taking this model from wandb: {config.inference.wandb_model_full_name}")
         # Initialize wandb and download the model file
-        # run = wandb.init(project=config.wandb.project, resume="allow")
+        # run = wandb.init(project=config.wandb.project, entity=config.wandb.entity, resume="allow")
         # artifact = run.use_artifact(config.inference.wandb_model_full_name, type='model')
         # artifact_dir = artifact.download()
         

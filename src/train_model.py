@@ -24,7 +24,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def train_model(config: DictConfig):
 
-    wandb_logger = WandbLogger(project=config.wandb.project, log_model=False)
+    wandb_logger = WandbLogger(project=config.wandb.project, entity=config.wandb.entity, log_model=True)
 
     torch.cuda.empty_cache()
     torch.set_float32_matmul_precision('medium')
