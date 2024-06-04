@@ -68,12 +68,20 @@ def main(config: DictConfig):
     temperature = config.inference.get('temperature', 0.8)
     top_k = config.inference.get('top_k', 50)
     
+    # Load the tokenizer
+    tokenizer = load_pretrained_tokenizer(config)
+
+    # prepare EOS token id
+    eos_token_id = tokenizer["EOS_None"]
+    print(f"eos_token_id: {eos_token_id}")
+    
     # Use model.generate for sequence generation
     generated_sequence = model.generate(
         input_ids=input_ids.to('cuda'),
         max_length=max_length,
         temperature=temperature,
-        top_k=top_k
+        top_k=top_k,
+        eos_token_id=eos_token_id
     )
     
     print(f"generated_sequence: {generated_sequence}")
@@ -83,8 +91,6 @@ def main(config: DictConfig):
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     wav_filename = f'output_{timestamp}.wav'
 
-    # Load the tokenizer
-    tokenizer = load_pretrained_tokenizer(config)
     
     # Ensure the output is in the correct format for the tokenizer
     tokens = generated_sequence.cpu().numpy()
