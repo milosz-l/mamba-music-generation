@@ -5,6 +5,8 @@ from miditok.pytorch_data import DatasetMIDI, DataCollator
 from torch.utils.data import random_split
 from omegaconf import DictConfig
 from miditok.pytorch_data import split_files_for_training
+import shutil
+
 
 TOKENIZR_MAPPING = {
     "remi": REMI,
