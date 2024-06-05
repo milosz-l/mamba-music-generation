@@ -25,6 +25,10 @@ def get_tokenizer_path(config: DictConfig):
 
 def get_tokenized_dataset(config: DictConfig):
 
+    dataset_chunks_dir = dataset_path / Path('midi_chunks')
+    if dataset_chunks_dir.exists():
+        shutil.rmtree(dataset_chunks_dir)
+
     dataset_path = Path(config.data.path) / config.data.dataset_name
     tokenizer_path = get_tokenizer_path(config)
 
@@ -39,7 +43,6 @@ def get_tokenized_dataset(config: DictConfig):
     else:
         tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.type.lower()](params=tokenizer_path)
 
-    dataset_chunks_dir = dataset_path / Path('midi_chunks')
 
     split_files_for_training(
         files_paths=midi_paths,
