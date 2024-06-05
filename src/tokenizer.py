@@ -34,8 +34,10 @@ def get_tokenized_dataset(config: DictConfig):
     dataset_path = Path(config.data.path) / config.data.dataset_name
     tokenizer_path = get_tokenizer_path(config)
 
-    # midi_paths = [path.resolve() for path in list(dataset_path.glob("**/*.mid*"))]
-    midi_paths = [Path('data/maestro/maestro-v3.0.0/2018/MIDI-Unprocessed_Schubert7-9_MID--AUDIO_16_R2_2018_wav.midi').resolve()]
+    if config.train.test_train_on_one_file:
+        midi_paths = [Path(config.train.test_train_on_one_file_path).resolve()]
+    else:
+        midi_paths = [path.resolve() for path in list(dataset_path.glob("**/*.mid*"))]
     if not tokenizer_path.exists():
         tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.type.lower()]()
         tokenizer.train(vocab_size=config.model.vocab_size,
@@ -67,8 +69,9 @@ def get_tokenized_dataset(config: DictConfig):
     val_size = dataset_size - train_size
 
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+    if config.train.test_train_on_one_file:
+        return dataset, dataset, collator
     return train_dataset, val_dataset, collator
-    # return dataset, dataset, collator
 
 
 def load_pretrained_tokenizer(config: DictConfig):

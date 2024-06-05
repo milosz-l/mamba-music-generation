@@ -20,6 +20,8 @@ training:
   gamma: 0.1
   callbacks:
     patience: 3
+  test_train_on_one_file: True
+  test_train_on_one_file_path: "data/maestro/maestro-v3.0.0/2018/MIDI-Unprocessed_Schubert7-9_MID--AUDIO_16_R2_2018_wav.midi"
 
 wandb:
   project: "WIMU mamba-music-generation"
