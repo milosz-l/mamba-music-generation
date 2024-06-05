@@ -5,6 +5,7 @@ from miditok.pytorch_data import DatasetMIDI, DataCollator
 from torch.utils.data import random_split
 from omegaconf import DictConfig
 from miditok.pytorch_data import split_files_for_training
+import shutil
 
 TOKENIZR_MAPPING = {
     "remi": REMI,
@@ -40,6 +41,8 @@ def get_tokenized_dataset(config: DictConfig):
         tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.type.lower()](params=tokenizer_path)
 
     dataset_chunks_dir = dataset_path / Path('midi_chunks')
+    if dataset_chunks_dir.exists():
+        shutil.rmtree(dataset_chunks_dir)
 
     split_files_for_training(
         files_paths=midi_paths,
@@ -61,9 +64,9 @@ def get_tokenized_dataset(config: DictConfig):
     train_size = int(config.data.train_split * dataset_size)
     val_size = dataset_size - train_size
 
-    train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
-    return train_dataset, val_dataset, collator
-    # return dataset, dataset, collator
+    # train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+    # return train_dataset, val_dataset, collator
+    return dataset, dataset, collator
 
 
 def load_pretrained_tokenizer(config: DictConfig):
