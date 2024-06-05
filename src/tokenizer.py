@@ -6,6 +6,8 @@ from torch.utils.data import random_split
 from omegaconf import DictConfig
 from miditok.pytorch_data import split_files_for_training
 import shutil
+import torch
+from torch.utils.data import Dataset
 
 TOKENIZR_MAPPING = {
     "remi": REMI,
@@ -18,6 +20,15 @@ TOKENIZR_MAPPING = {
     "mmm": MMM
 }
 
+class OverfitDataset(Dataset):
+    def __init__(self, data):
+        self.data = data
+    def __len__(self):
+        return 1
+
+    def __getitem__(self, idx):
+
+        return {'input_ids': self.data}
 
 def get_tokenizer_path(config: DictConfig):
     dataset_path = Path(config.data.path) / config.data.dataset_name
@@ -29,8 +40,12 @@ def get_tokenized_dataset(config: DictConfig):
     dataset_path = Path(config.data.path) / config.data.dataset_name
     tokenizer_path = get_tokenizer_path(config)
 
-    # midi_paths = [path.resolve() for path in list(dataset_path.glob("**/*.mid*"))]
-    midi_paths = [Path('data/maestro/maestro-v3.0.0/2018/MIDI-Unprocessed_Schubert7-9_MID--AUDIO_16_R2_2018_wav.midi').resolve()]
+    dataset_chunks_dir = dataset_path / Path('midi_chunks')
+    if dataset_chunks_dir.exists():
+        shutil.rmtree(dataset_chunks_dir)
+
+    midi_paths = [path.resolve() for path in list(dataset_path.glob("**/*.mid*"))]
+    # midi_paths = [Path('data/maestro/maestro-v3.0.0/2018/MIDI-Unprocessed_Schubert7-9_MID--AUDIO_16_R2_2018_wav.midi').resolve()]
     if not tokenizer_path.exists():
         tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.type.lower()]()
         tokenizer.train(vocab_size=config.model.vocab_size,
@@ -40,9 +55,7 @@ def get_tokenized_dataset(config: DictConfig):
     else:
         tokenizer = TOKENIZR_MAPPING[config.data.tokenizer.type.lower()](params=tokenizer_path)
 
-    dataset_chunks_dir = dataset_path / Path('midi_chunks')
-    if dataset_chunks_dir.exists():
-        shutil.rmtree(dataset_chunks_dir)
+
 
     split_files_for_training(
         files_paths=midi_paths,
@@ -59,11 +72,13 @@ def get_tokenized_dataset(config: DictConfig):
         eos_token_id=tokenizer["EOS_None"],
     )
     collator = DataCollator(tokenizer.pad_token_id, shift_labels=True, copy_inputs_as_labels=True)
-
     dataset_size = len(dataset)
     train_size = int(config.data.train_split * dataset_size)
     val_size = dataset_size - train_size
 
+    data = torch.arange(2000)
+
+    dataset = OverfitDataset(data)
     # train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
     # return train_dataset, val_dataset, collator
     return dataset, dataset, collator
