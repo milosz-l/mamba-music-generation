@@ -1,7 +1,7 @@
 import hydra
 from omegaconf import DictConfig
 
-from src.tokenizer import get_tokenized_dataset, load_pretrained_tokenizer
+from src.tokenizer import get_tokenized_dataset, get_tokenizer
 from src.utils import export_to_wav
 
 
@@ -15,7 +15,7 @@ def main(config: DictConfig):
     print(f"train_dataset[0]['input_ids'].shape: {train_dataset[0]['input_ids'].shape}")
     print(f"train_dataset[0]['input_ids'].unsqueeze(0): {train_dataset[0]['input_ids'].unsqueeze(0)}")
     print(f"train_dataset[0]['input_ids'].unsqueeze(0).shape: {train_dataset[0]['input_ids'].unsqueeze(0).shape}")
-    tokenizer = load_pretrained_tokenizer(config)
+    tokenizer = get_tokenizer(config)
     export_to_wav(tokenizer, train_dataset[0]['input_ids'].unsqueeze(0),
                   'out.wav')
 

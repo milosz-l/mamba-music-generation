@@ -8,7 +8,7 @@ from pathlib import Path
 from symusic import Synthesizer, dump_wav
 from datetime import datetime
 from utils import export_to_wav
-from tokenizer import load_pretrained_tokenizer  # Import the tokenizer
+from tokenizer import get_tokenizer  # Import the tokenizer
 
 def load_model(model_path, config, inference_mode=True):
     checkpoint = torch.load(model_path)
@@ -70,7 +70,7 @@ def main(config: DictConfig):
     top_k = config.inference.get('top_k', 50)
     
     # Load the tokenizer
-    tokenizer = load_pretrained_tokenizer(config)
+    tokenizer = get_tokenizer(config)
 
     # prepare EOS token id
     eos_token_id = tokenizer["EOS_None"]

@@ -1,7 +1,7 @@
 name: mamba
 model_dimension: 1024
 n_layer: 48
-vocab_size: 30000
+vocab_size: 20000
 rms_norm: True
 residual_in_fp32: True
 fused_add_norm: True

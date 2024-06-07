@@ -8,7 +8,7 @@ from pathlib import Path
 from symusic import Synthesizer, dump_wav
 from datetime import datetime
 from utils import export_to_wav
-from tokenizer import load_pretrained_tokenizer  # Import the tokenizer
+from tokenizer import get_tokenizer  # Import the tokenizer
 
 def load_model(model_path, config):
     model = get_mamba_model(config.model)
@@ -81,7 +81,7 @@ def main(config: DictConfig):
     wav_filename = f'output_{model_name}_{timestamp}.wav'
 
     # Load the tokenizer
-    tokenizer = load_pretrained_tokenizer(config)
+    tokenizer = get_tokenizer(config)
     
     # Ensure the output is in the correct format for the tokenizer
     tokens = generated_sequence.cpu().numpy()

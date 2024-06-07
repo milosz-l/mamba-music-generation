@@ -1,7 +1,7 @@
 import hydra
 from omegaconf import DictConfig
 
-from src.tokenizer import get_tokenized_dataset, load_pretrained_tokenizer
+from src.tokenizer import get_tokenized_dataset
 from src.utils import export_to_wav
 
 
