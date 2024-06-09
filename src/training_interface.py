@@ -26,6 +26,7 @@ class LighteningMamba(pl.LightningModule):
         self.model = get_mamba_model(config.model)
         self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataset(
             config)
+        self.first_token = self.train_dataset[0]["input_ids"][0]
 
         self.save_hyperparameters(ignore=['model'])
 

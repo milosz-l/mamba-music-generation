@@ -1,15 +1,14 @@
+import random
 from pathlib import Path
-
-from miditok import REMI, MIDILike, TSD, Structured, CPWord, Octuple, MuMIDI, MMM, MusicTokenizer
-from miditok.pytorch_data import DatasetMIDI, DataCollator
-from torch.utils.data import random_split
-from omegaconf import DictConfig
-from miditok.pytorch_data import split_files_for_training
 import shutil
 from uuid import uuid4
 import filecmp
 import tempfile
-from omegaconf import OmegaConf
+from omegaconf import OmegaConf, DictConfig
+
+from miditok import REMI, MIDILike, TSD, Structured, CPWord, Octuple, MuMIDI, MMM, MusicTokenizer
+from miditok.pytorch_data import DatasetMIDI, DataCollator, split_files_for_training
+from torch.utils.data import random_split, Subset
 
 
 TOKENIZER_DIR = Path("tokenizers")
@@ -34,8 +33,10 @@ def prepare_tokenizer_config(config: DictConfig):
     return OmegaConf.create(tokenizer_config)
 
 
-def find_matching_tokenizer_path(tokenizer_config: DictConfig, tokenizer_dir: Path | str):
-    potential_config_paths = Path(tokenizer_dir).glob(f"**/{TOKENIZER_CONFIG_FILENAME}")
+def find_matching_tokenizer_path(tokenizer_config: DictConfig,
+                                 tokenizer_dir: Path | str):
+    potential_config_paths = Path(tokenizer_dir).glob(
+        f"**/{TOKENIZER_CONFIG_FILENAME}")
     with tempfile.NamedTemporaryFile(suffix='.yaml') as f:
 
         OmegaConf.save(tokenizer_config, f=f.name)
@@ -43,6 +44,7 @@ def find_matching_tokenizer_path(tokenizer_config: DictConfig, tokenizer_dir: Pa
             print(filecmp.cmp(f.name, cfg_path))
             if filecmp.cmp(f.name, cfg_path):
                 return cfg_path.parent / TOKENIZER_PARAMS_FILENAME
+    raise Exception("Could not find tokenizer config")  # pylint: disable=broad-exception-raised
 
 
 def get_uuid():
@@ -56,10 +58,12 @@ def get_tokenized_dataset(config: DictConfig):
     if dataset_chunks_dir.exists():
         shutil.rmtree(dataset_chunks_dir)
 
-    if config.data.test_train_on_one_file:
+    if config.data.test_train_on_one_file and config.data.test_train_on_one_file_path:
         midi_paths = [Path(config.data.test_train_on_one_file_path).resolve()]
     else:
-        midi_paths = [path.resolve() for path in list(dataset_path.glob("**/*.mid*"))]
+        midi_paths = [
+            path.resolve() for path in list(dataset_path.glob("**/*.mid*"))
+        ]
     tokenizer = get_tokenizer(config, midi_paths)
 
     split_files_for_training(
@@ -76,15 +80,23 @@ def get_tokenized_dataset(config: DictConfig):
         bos_token_id=tokenizer["BOS_None"],
         eos_token_id=tokenizer["EOS_None"],
     )
-    collator = DataCollator(tokenizer.pad_token_id, shift_labels=True, copy_inputs_as_labels=True)
+    collator = DataCollator(tokenizer.pad_token_id,
+                            shift_labels=True,
+                            copy_inputs_as_labels=True)
 
     dataset_size = len(dataset)
     train_size = int(config.data.train_split * dataset_size)
     val_size = dataset_size - train_size
 
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+
     if config.data.test_train_on_one_file:
-        return dataset, dataset, collator
+        index_to_train = random.randint(0, dataset_size - 1)
+        single_item_dataset = Subset(dataset, [index_to_train])
+        print(
+            f"Processing: {len(single_item_dataset)} with sequence length {len(single_item_dataset[0]['input_ids'])}"
+        )
+        return single_item_dataset, single_item_dataset, collator
     return train_dataset, val_dataset, collator
 
 
@@ -93,20 +105,23 @@ def train_tokenizer(tokenizer_config: DictConfig, midi_paths):
     tokenizer.train(vocab_size=tokenizer_config.vocab_size,
                     files_paths=midi_paths,
                     model=tokenizer_config.tokenizer.training_model)
-    
+
     uuid = get_uuid()
-    tokenizer.save_params(TOKENIZER_DIR / uuid/ TOKENIZER_PARAMS_FILENAME)
-    OmegaConf.save(tokenizer_config, TOKENIZER_DIR / uuid / TOKENIZER_CONFIG_FILENAME)
+    tokenizer.save_params(TOKENIZER_DIR / uuid / TOKENIZER_PARAMS_FILENAME)
+    OmegaConf.save(tokenizer_config,
+                   TOKENIZER_DIR / uuid / TOKENIZER_CONFIG_FILENAME)
     return tokenizer
 
 
-def get_tokenizer(config: DictConfig, midi_paths = None) -> MusicTokenizer | None:
+def get_tokenizer(config: DictConfig,
+                  midi_paths=None) -> MusicTokenizer | None:
     tokenizer_config = prepare_tokenizer_config(config)
-
-    tokenizer_config = prepare_tokenizer_config(config)
-    tokenizer_path = find_matching_tokenizer_path(tokenizer_config, TOKENIZER_DIR)
+    tokenizer_path = find_matching_tokenizer_path(tokenizer_config,
+                                                  TOKENIZER_DIR)
     if tokenizer_path is not None:
-        return TOKENIZR_MAPPING[config.data.tokenizer.type.lower()](params=tokenizer_path)
-    
+        return TOKENIZR_MAPPING[config.data.tokenizer.type.lower()](
+            params=tokenizer_path)
+
     if midi_paths is not None:
         return train_tokenizer(tokenizer_config, midi_paths)
+    raise Exception("Tokenizer is tokenizer path and midi path")  # pylint: disable=broad-exception-raised
