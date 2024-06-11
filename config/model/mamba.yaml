@@ -1,13 +1,13 @@
 name: mamba
-model_dimension: 128
-n_layer: 64
-vocab_size: 30000
+model_dimension: 2048
+n_layer: 6
+vocab_size: 20000
 rms_norm: True
 residual_in_fp32: True
 fused_add_norm: True
 pad_vocab_size_multiple:  8
-tie_embeddings: True
+tie_embeddings: False
 ssm_config:
   d_conv: 4
-  d_state: 16
+  d_state: 128
   expand: 2

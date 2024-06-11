@@ -6,7 +6,7 @@ from omegaconf import DictConfig
 
 import pytorch_lightning as pl
 
-from tokenizer import get_tokenized_dataloader
+from tokenizer import get_tokenized_dataset
 from mamba_model import get_mamba_model
 
 
@@ -24,8 +24,9 @@ class LighteningMamba(pl.LightningModule):
 
         self.loss_function = nn.CrossEntropyLoss()
         self.model = get_mamba_model(config.model)
-        self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataloader(
+        self.train_dataset, self.val_dataset, self.collator = get_tokenized_dataset(
             config)
+        self.first_token = self.train_dataset[0]["input_ids"][0]
 
         self.save_hyperparameters(ignore=['model'])
 
@@ -37,9 +38,17 @@ class LighteningMamba(pl.LightningModule):
 
     # pylint: disable = unused-argument
     def training_step(self, batch, batch_idx):
+        # print(f"batch in training_step: {batch}")
         input_ids, _ = batch['input_ids'], batch['attention_mask']
         outputs = self(input_ids)
-        loss = self.loss_function(outputs.transpose(1, 2), input_ids)
+        labels = batch['labels']
+        loss = self.loss_function(outputs.transpose(1, 2), labels)
+        # debug loss
+        # print(f"input_ids: {input_ids}")
+        # print(f"input_ids.shape: {input_ids.shape}")
+        # print(f"outputs: {outputs}")
+        # print(f"outputs.shape: {outputs.shape}")
+        # print(f"loss: {loss}")
 
         self.log('train_loss',
                  loss,
@@ -53,7 +62,8 @@ class LighteningMamba(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         input_ids, _ = batch['input_ids'], batch['attention_mask']
         outputs = self(input_ids)
-        loss = self.loss_function(outputs.transpose(1, 2), input_ids)
+        labels = batch['labels']
+        loss = self.loss_function(outputs.transpose(1, 2), labels)
 
         self.log('val_loss',
                  loss,
@@ -73,13 +83,15 @@ class LighteningMamba(pl.LightningModule):
         return DataLoader(self.train_dataset,
                           batch_size=self.config.training.batch_size,
                           collate_fn=self.collator,
-                          num_workers=self.num_workers)
+                          num_workers=self.num_workers,
+                          shuffle=True)
 
     def val_dataloader(self):
         return DataLoader(self.val_dataset,
                           batch_size=self.config.training.batch_size,
                           collate_fn=self.collator,
-                          num_workers=self.num_workers)
+                          num_workers=self.num_workers,
+                          shuffle=False)
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)

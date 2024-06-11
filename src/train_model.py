@@ -4,7 +4,6 @@ This is the demo code that uses hydra to access the parameters in under the dire
 Author: Khuyen Tran
 """
 import os
-from pathlib import Path
 
 import hydra
 import torch
@@ -16,6 +15,8 @@ import pytorch_lightning as pl
 from training_interface import LighteningMamba
 from callbacks import get_callbacks
 import wandb
+from wandb_cleanup import cleanup_wandb_local_cache
+from utils import generate_music
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
@@ -23,11 +24,14 @@ os.environ["TOKENIZERS_PARALLELISM"] = "true"
 @hydra.main(config_path="../config", config_name="main", version_base="1.2")
 def train_model(config: DictConfig):
 
-    wandb_logger = WandbLogger(project=config.wandb.project, log_model="all")
+    wandb_logger = WandbLogger(project=config.wandb.project,
+                               entity=config.wandb.entity,
+                               log_model=True)
 
+    torch.cuda.empty_cache()
     torch.set_float32_matmul_precision('medium')
 
-    callbacks = get_callbacks()
+    callbacks = get_callbacks(config)
 
     interface_model = LighteningMamba(config)
     trainer = pl.Trainer(callbacks=callbacks,
@@ -35,14 +39,29 @@ def train_model(config: DictConfig):
                          logger=wandb_logger)
     trainer.fit(interface_model)
 
-    # Save the trained model with the same name as the wandb experiment
-    model_path = Path(config.models.save_path)
-    model_path.mkdir(parents=True, exist_ok=True)
-    experiment_name = wandb.run.name
-    torch.save(interface_model.model.state_dict(),
-               model_path / f"{experiment_name}_model.pt")
+    # Save the trained model with the same name as the wandb experiment locally after whole training
+    #(wandb logging is handled in callback)
+    # model_path = Path(config.models.save_path)
+    # model_path.mkdir(parents=True, exist_ok=True)
+    # experiment_name = wandb.run.name
+    # torch.save(interface_model.model.state_dict(),
+    #            model_path / f"{experiment_name}_model.pt")
 
     wandb.finish()
+
+    cleanup_wandb_local_cache()
+
+    interface_model.model.eval()
+    interface_model.model.inference_mode = True
+
+    input_ids = torch.tensor([[interface_model.first_token]], dtype=torch.long)
+    overtrained_song = None
+    if config.data.test_train_on_one_file:
+        overtrained_song = interface_model.train_dataset[0]["input_ids"]
+    generate_music(input_ids=input_ids,
+                   model=interface_model.model,
+                   config=config,
+                   overtrained_song=overtrained_song)
 
 
 if __name__ == "__main__":

@@ -55,7 +55,7 @@ wandb login
 
 3. Test the environment:
 ```bash
-python src/test_env.py
+python tests/test_env.py
 ```
 
 ## Set up the environment - detailed instructions
@@ -91,7 +91,7 @@ wandb login
 
 After these commands paste:
 ```bash
-python src/test_env.py
+python tests/test_env.py
 ```
 
 If it won't work try with installing following dependencies through pip:
@@ -123,6 +123,12 @@ python src/download_data.py
 ```bash
 python src/train_model.py > "logs/output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
 ```
+
+3. Clean up wandb cache (local and in the cloud):
+```bash
+python src/wandb_clenaup.py
+```
+TODO: cleanup functions should be run automatically as a callback every few epochs. However, it should be tested, because wandb seem to be logging all of the models in the cloud.
 
 ## View and alter configurations
 To view the configurations associated with a Pythons script, run the following command:
@@ -166,6 +172,16 @@ To auto-generate API document for your project, run:
 
 ```bash
 make docs
+```
+
+# Inference
+After training, you can fined models in `models/` directory.
+
+1. Choose a model from `models/` directory.
+2. Make sure the config in `config/mamba_model.yaml` is the same as the model you want to use.
+3. Run the inference:
+```bash
+python src/run_generate.py > "logs/generate_output_$(date +'%Y-%m-%d_%H-%M-%S').log" 2>&1
 ```
 
 

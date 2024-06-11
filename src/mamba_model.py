@@ -57,15 +57,21 @@ def _init_weights(
                     p /= math.sqrt(n_residuals_per_layer * n_layer)
 
 
+class LogitsWrapper(torch.Tensor):
+
+    def __init__(self, logits):
+        super().__init__()
+        self.logits = logits
+
+
 class MambaMusicHead(nn.Module, GenerationMixin):
 
-    def __init__(
-        self,
-        config: MambaConfig,
-        initializer_cfg=None,
-        device=None,
-        dtype=None,
-    ) -> None:
+    def __init__(self,
+                 config: MambaConfig,
+                 initializer_cfg=None,
+                 device=None,
+                 dtype=None,
+                 inference_mode=False) -> None:
         self.config = config
         d_model = config.d_model
         n_layer = config.n_layer
@@ -76,6 +82,7 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         fused_add_norm = config.fused_add_norm
         pad_vocab_size_multiple = config.pad_vocab_size_multiple
         factory_kwargs = {"device": device, "dtype": dtype}
+        self.inference_mode = inference_mode
 
         super().__init__()
         if vocab_size % pad_vocab_size_multiple != 0:
@@ -120,7 +127,7 @@ class MambaMusicHead(nn.Module, GenerationMixin):
                                                       dtype=dtype,
                                                       **kwargs)
 
-    def forward(self, input_ids):
+    def forward(self, input_ids, **kwargs):  # pylint: disable=unused-argument
         """
         "position_ids" is just to be compatible with Transformer generation. We don't use it.
         num_last_tokens: if > 0, only return the logits for the last n tokens
@@ -128,29 +135,9 @@ class MambaMusicHead(nn.Module, GenerationMixin):
         hidden_states = self.backbone(input_ids, inference_params=None)
         # if num_last_tokens > 0:
         #     hidden_states = hidden_states[:, -num_last_tokens:]
+
+        # NOTE: use the first return during inference and the second return during training
+        if self.inference_mode:
+            return LogitsWrapper(self.lm_head(hidden_states))
+
         return self.lm_head(hidden_states)
-
-    # @classmethod
-    # def from_pretrained(cls, pretrained_model_name, device=None, dtype=None, **kwargs):
-    #     config_data = load_config_hf(pretrained_model_name)
-    #     config = MambaConfig(**config_data)
-    #     model = cls(config, device=device, dtype=dtype, **kwargs)
-    #     model.load_state_dict(load_state_dict_hf(pretrained_model_name, device=device, dtype=dtype))
-    #     return model
-
-    # def save_pretrained(self, save_directory):
-    #     """
-    #     Minimal implementation of save_pretrained for MambaLMHeadModel.
-    #     Save the model and its configuration file to a directory.
-    #     """
-    #     # Ensure save_directory exists
-    #     os.makedirs(save_directory, exist_ok=True)
-    #
-    #     # Save the model's state_dict
-    #     model_path = os.path.join(save_directory, 'pytorch_model.bin')
-    #     torch.save(self.state_dict(), model_path)
-    #
-    #     # Save the configuration of the model
-    #     config_path = os.path.join(save_directory, 'config.json')
-    #     with open(config_path, 'w') as f:
-    #         json.dump(self.config.__dict__, f)
