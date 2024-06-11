@@ -43,5 +43,5 @@ def cleanup_wandb_local_cache():
 
 
 if __name__ == "__main__":
-    delete_models_witout_tags_in_wandb()   # pylint: disable=no-value-for-parameter
+    delete_models_witout_tags_in_wandb()  # pylint: disable=no-value-for-parameter
     cleanup_wandb_local_cache()

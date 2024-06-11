@@ -46,12 +46,13 @@ def generate_music(input_ids, model, config, overtrained_song=None):
     print("Input tensor device:", input_ids.device)
 
     # Use model.generate for sequence generation
-    generated_sequence = model.generate(input_ids=input_ids,
-                                        max_length=config.inference.max_length,
-                                        temperature=config.inference.temperature,
-                                        top_k=config.inference.top_k,
-                                        eos_token_id=tokenizer["EOS_None"],
-                                        repetition_penalty=config.inference.repetition_penalty)
+    generated_sequence = model.generate(
+        input_ids=input_ids,
+        max_length=config.inference.max_length,
+        temperature=config.inference.temperature,
+        top_k=config.inference.top_k,
+        eos_token_id=tokenizer["EOS_None"],
+        repetition_penalty=config.inference.repetition_penalty)
 
     # Export the output to a .wav file
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -71,7 +72,15 @@ def generate_music(input_ids, model, config, overtrained_song=None):
         export_to_wav(tokenizer, original_song.numpy(),
                       (test_path / "input.wav").as_posix())
         overtrained_song = overtrained_song[:max_dim].unsqueeze(0)
-        generated_sequence = generated_sequence[:, :max_dim]
-        concatenated_song = torch.cat(
-            (overtrained_song, generated_sequence.cpu()), dim=0)
+        generated_sequence = generated_sequence[:, :max_dim].cpu()
+        concatenated_song = torch.cat((overtrained_song, generated_sequence),
+                                      dim=0)
         print(concatenated_song)
+
+        # Compare tensors element-wise
+        matches = overtrained_song == generated_sequence
+
+        # Calculate the percentage of elements that are the same
+        percentage_same = torch.sum(matches).item() / matches.numel() * 100
+
+        print(f"Percentage of elements that are the same: {percentage_same}%")

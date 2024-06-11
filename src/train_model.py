@@ -26,7 +26,7 @@ def train_model(config: DictConfig):
 
     wandb_logger = WandbLogger(project=config.wandb.project,
                                entity=config.wandb.entity,
-                               log_model=False)
+                               log_model=True)
 
     torch.cuda.empty_cache()
     torch.set_float32_matmul_precision('medium')

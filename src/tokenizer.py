@@ -10,7 +10,6 @@ from miditok import REMI, MIDILike, TSD, Structured, CPWord, Octuple, MuMIDI, MM
 from miditok.pytorch_data import DatasetMIDI, DataCollator, split_files_for_training
 from torch.utils.data import random_split, Subset
 
-
 TOKENIZER_DIR = Path("tokenizers")
 TOKENIZER_PARAMS_FILENAME = "params.json"
 TOKENIZER_CONFIG_FILENAME = "config.yaml"
@@ -44,7 +43,7 @@ def find_matching_tokenizer_path(tokenizer_config: DictConfig,
             print(filecmp.cmp(f.name, cfg_path))
             if filecmp.cmp(f.name, cfg_path):
                 return cfg_path.parent / TOKENIZER_PARAMS_FILENAME
-    raise Exception("Could not find tokenizer config")  # pylint: disable=broad-exception-raised
+    return None
 
 
 def get_uuid():
