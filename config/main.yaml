@@ -3,7 +3,7 @@ defaults:
   - _self_
 
 data:
-  path: data
+  path: /net/tscratch/people/plgmiloszl/mamba-music-generation/data
   dataset_name: maestro
   tokenizer:
     type: tsd  # remi | midiike | tsd, structured | cpword | octuple | mumidi | mmm
@@ -14,9 +14,9 @@ data:
   test_train_on_one_file_path: ""  # empty if you want to use random song
 
 training:
-  num_workers: 4 # lower this setting in case of workers segmentation fault error
+  num_workers: 2 # lower this setting in case of workers segmentation fault error
   batch_size: 1
-  epochs: 60
+  epochs: 2
   learning_rate: 1e-4
   step_size: 3
   gamma: 0.1

@@ -1,5 +1,5 @@
 name: mamba
-model_dimension: 2048
+model_dimension: 512
 n_layer: 6
 vocab_size: 20000
 rms_norm: True

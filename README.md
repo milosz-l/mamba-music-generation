@@ -43,6 +43,39 @@
 ```
 
 ## Set up the environemnt with TLDR bash script
+0. (Optional - for plgrid)
+
+0.0. Download python 3.10 or above
+```bash
+source plgrid_change_cache_dirs.sh
+conda create -n mamba python=3.10
+conda activate mamba
+pip install poetry
+poetry shell
+```
+
+0.1. Setup cuda (nvcc)
+Search for cuda versions with (specific for Rocky Linux):
+```bash
+module spider cuda
+```
+
+Load cuda module with:
+```bash
+module load CUDA/12.1.1
+```
+NOTE: remember to load cuda and check if nvcc works inside the poetry virtual env!
+
+0.2 Change the path to the data in the config/main.yaml
+Make sure it's absolute, so instead of:
+```bash
+path: data
+```
+it should be for example:
+```bash
+path: /net/tscratch/people/plgmiloszl/mamba-music-generation/data
+```
+
 1. Install dependencies and download data:
 ```bash
 bash vast_ai_setup.sh
