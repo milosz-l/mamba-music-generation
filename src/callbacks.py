@@ -25,6 +25,7 @@ def get_callbacks(config: DictConfig):
         mode='min')
 
     checkpoint_callback = ModelCheckpoint(
+        # saves model in `WIMU\ mamba_music_generation` folder
         filename='best-checkpoint',
         save_top_k=1,
         verbose=True,
@@ -34,15 +35,18 @@ def get_callbacks(config: DictConfig):
 
     wandb_cleanup_callback = WandbCleanupCallback(config)
 
-    # periodic_checkpoint_callback = ModelCheckpoint(
-    #     filename='checkpoint-{epoch:02d}-{val_loss:.2f}',
-    #     save_top_k=-1,  # Save all checkpoints
-    #     every_n_epochs=5,  # Save every 5 epochs
-    #     verbose=True,
-    # )
+    periodic_checkpoint_callback = ModelCheckpoint(
+        filename='checkpoint-{epoch:03d}-{val_loss:.3f}',
+        save_top_k=5,
+        monitor='val_loss',
+        mode='min',
+        every_n_epochs=1,
+        verbose=True,
+    )
 
     return [
         early_stop_callback,
-        checkpoint_callback,
-        wandb_cleanup_callback  #, periodic_checkpoint_callback
+        # checkpoint_callback,
+        periodic_checkpoint_callback,
+        # wandb_cleanup_callback
     ]
