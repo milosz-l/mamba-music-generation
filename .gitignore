@@ -1,3 +1,8 @@
+# paper (latex related)
+docs/paper/*
+!docs/paper/paper.tex
+!docs/paper/references.bib
+
 *.wav
 *.ckpt
 models/
