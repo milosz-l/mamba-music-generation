@@ -7,8 +7,8 @@ import os
 
 import hydra
 import torch
-
 from omegaconf import DictConfig
+import traceback
 
 from pytorch_lightning.loggers import WandbLogger
 import pytorch_lightning as pl
@@ -17,6 +17,7 @@ from callbacks import get_callbacks
 import wandb
 from wandb_cleanup import cleanup_wandb_local_cache
 from utils import generate_music
+from tokenizer import DATA_TEMPDIR
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
@@ -37,7 +38,12 @@ def train_model(config: DictConfig):
     trainer = pl.Trainer(callbacks=callbacks,
                          max_epochs=config.training.epochs,
                          logger=wandb_logger)
-    trainer.fit(interface_model)
+    try:
+        trainer.fit(interface_model)
+    except Exception:
+        DATA_TEMPDIR.cleanup()
+        traceback.print_exc()
+
 
     # Save the trained model with the same name as the wandb experiment locally after whole training
     #(wandb logging is handled in callback)

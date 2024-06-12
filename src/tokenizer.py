@@ -1,6 +1,5 @@
 import random
 from pathlib import Path
-import shutil
 from uuid import uuid4
 import filecmp
 import tempfile
@@ -9,6 +8,7 @@ from omegaconf import OmegaConf, DictConfig
 from miditok import REMI, MIDILike, TSD, Structured, CPWord, Octuple, MuMIDI, MMM, MusicTokenizer
 from miditok.pytorch_data import DatasetMIDI, DataCollator, split_files_for_training
 from torch.utils.data import random_split, Subset
+
 
 TOKENIZER_DIR = Path("tokenizers")
 TOKENIZER_PARAMS_FILENAME = "params.json"
@@ -24,6 +24,8 @@ TOKENIZR_MAPPING = {
     "mumidi": MuMIDI,
     "mmm": MMM
 }
+
+DATA_TEMPDIR = tempfile.TemporaryDirectory()
 
 
 def prepare_tokenizer_config(config: DictConfig):
@@ -53,10 +55,6 @@ def get_uuid():
 def get_tokenized_dataset(config: DictConfig):
 
     dataset_path = Path(config.data.path) / config.data.dataset_name
-    dataset_chunks_dir = dataset_path / Path("midi_chunks")
-    if dataset_chunks_dir.exists():
-        shutil.rmtree(dataset_chunks_dir)
-
     if config.data.test_train_on_one_file and config.data.test_train_on_one_file_path:
         midi_paths = [Path(config.data.test_train_on_one_file_path).resolve()]
     else:
@@ -65,15 +63,15 @@ def get_tokenized_dataset(config: DictConfig):
         ]
     tokenizer = get_tokenizer(config, midi_paths)
 
+    tempdir_path = Path(DATA_TEMPDIR.name)
     split_files_for_training(
         files_paths=midi_paths,
         tokenizer=tokenizer,
-        save_dir=dataset_chunks_dir,
+        save_dir=tempdir_path,
         max_seq_len=config.data.max_seq_len,
     )
-
     dataset = DatasetMIDI(
-        files_paths=list(dataset_chunks_dir.glob("**/*.mid*")),
+        files_paths=list(tempdir_path.glob("**/*.mid*")),
         tokenizer=tokenizer,
         max_seq_len=config.data.max_seq_len,
         bos_token_id=tokenizer["BOS_None"],
