@@ -323,7 +323,7 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
-\addbibresource{bibliografia.bib}
+\addbibresource{references.bib}
 
 \begin{document}
 %
@@ -440,9 +440,62 @@ Symbolic music generation has been an area of active research over the past deca
 We decided to use MIDI \cite{midi} music representation. It is by far the most popular format in the field of symbolic music and allows us to freely use the largest symbolic music datasets available. Because of model's size a lot of data is required to reduce the chance of overfitting. The dataset we chose is MAESTRO (MIDI and Audio Edited for Synchronous TRacks and Organization) \cite{maestro1} \cite{maestro2} . It contains over 200 hours of virtuosic piano performances. The data comes from ten years of International Piano-e-Competition. It is one of the most popular datasets, which allows us to easily compare our results to other models. The data was downloaded using Muspy \cite{muspy} library, which allows for convenient handling of symbolic musical data. The tokenization was conducted using miditok \cite{miditok2021} library. It contains methods for tokenising MIDI data into most of the most popular formats. We decided to opt for REMI \cite{remi} format with learned Byte-Pair Encodings.
 
 \section{Architecture}
-We decided to use the current state of the art SSM architecture called Mamba \cite{mamba}. It further improves the Structured State Space sequence (S4) \cite{s4} model by allowing the model to selectively propagate or forget information along the
-sequence length dimension depending on the current token. It also introduced an efficient hardware-aware parallel algorithm to speed up the computation time. Mamba achieves 5× higher throughput than Transformers and linear scaling in sequence length \cite{mamba}. It reaches state-of-the-art performance across several modalities such as language, audio, and genomics. On language modeling, our Mamba-3B model
-outperforms Transformers of the same size and matches Transformers twice its size, both in pretraining and downstream evaluation \cite{mamba}.
+Mamba utilises a novel approach called selective state space models (SSMs), which enhance traditional state space models by allowing 
+parameters to be functions of the input. This design enables the model to selectively propagate or forget information along the sequence length,
+dependent on the current input token. Mamba integrates this selective SSM approach into a simplified end-to-end architecture, foregoing traditional components 
+like attention or MLP blocks found in architectures like Transformers.
+
+The main difference between Selective SSM and traditional SSM is the input-dependence, which mimics what the attention mechanism in Transformers
+does—essentially assessing whether a specific token is important or not. However, this feature sacrifices the ability of traditional SSMs
+to precompute all learnable matrices ($\Delta$, A, B, C) and their configurations based on sequence length in a single inference pass. 
+To address this, we introduce a mechanism of Parallel Associative Scan (similar to Prefix Sum) that requires storing precomputed calculations,
+leading to higher memory usage but still maintaining linear computation.
+
+\begin{figure}[!htbp]
+    \centering \includegraphics[width=\linewidth]{../assets/SelectiveSSM.png}
+    \caption{Selective SSM \cite{mamba}}
+    \label{fig:ssm}
+\end{figure}
+
+To enhance efficiency further, the authors proposed using a hardware-aware algorithm that leverages two main types of GPU memory: 
+SRAM, which is fast but has limited capacity (ideal for matrix calculations), and HBM, which is slower but has a larger capacity. 
+The main bottleneck of this approach is managing the data transfer between these memory types.
+
+\begin{figure}[!htbp]
+    \centering \includegraphics[width=\linewidth]{../assets/Mamba.png}
+    \caption{Mamba block \cite{mamba}}
+    \label{fig:mamba}
+\end{figure}
+
+Selective SSM is a crucial component of the Mamba block, but the system also includes linear layers that increase dimensionality, nonlinear layers, and gating connections.
+Whole architecture is build from many Mamba block which are computed layer by layer.
+
+
+\begin{table}[t] \centering
+    % Podpis tabeli umieszczamy od góry
+    \caption{Model comparison \cite{mamba}}
+    \label{tab:comparison}
+
+    % Tabela z trzema kolumnami:
+    % dwie wyrównanie do środka [c], a ostatnia do prawej [r]
+    % szerokość kolumn automatyczna (równa szerokości tekstu)
+    \resizebox{\linewidth}{!}{\begin{tabular}{| c | c | c | c |} \hline
+        Architecture       		& Complexity    			& Memory   		& Performance \\ \hline\hline
+        Transformer      			&    	 $ O(N^2)$ 		& $O(N^2)$     		& great    \\ \hline
+        RNN     				&    	$O(N)$		 	& $O(N)$    		& poor     \\ \hline
+        SSM      				&  	$O(N)$ 			& $O(N)$     		& poor     \\ \hline
+       Selective SSM (Mamba)     &    	 $O(N)$ 			& $O(N)$    		& great.  \\ \hline
+        % Komórka o szerokości dwóch kolumn, wyrównana do prawej
+        % Przypisy dolne w tabelach wstawiamy przez \tablefootnote
+        % \multicolumn{2}{|r|}{Suma\tablefootnote{Table footnote.}} & 123,45 \\ \hline
+    \end{tabular}}
+\end{table}
+
+\begin{figure}[!htbp]
+    \centering \includegraphics[width=\linewidth]{../assets/results.png}
+    \caption{Benchmarks \cite{mamba}}
+    \label{fig:mamba}
+\end{figure}
 
 \section{Training Setup}
 TODO

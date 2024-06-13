@@ -2,6 +2,7 @@
 docs/paper/*
 !docs/paper/paper.tex
 !docs/paper/references.bib
+!docs/paper/paper.pdf
 
 *.wav
 *.ckpt
