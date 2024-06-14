@@ -470,27 +470,6 @@ The main bottleneck of this approach is managing the data transfer between these
 Selective SSM is a crucial component of the Mamba block, but the system also includes linear layers that increase dimensionality, nonlinear layers, and gating connections.
 Whole architecture is build from many Mamba block which are computed layer by layer.
 
-
-\begin{table}[t] \centering
-    % Podpis tabeli umieszczamy od góry
-    \caption{Model comparison \cite{mamba}}
-    \label{tab:comparison}
-
-    % Tabela z trzema kolumnami:
-    % dwie wyrównanie do środka [c], a ostatnia do prawej [r]
-    % szerokość kolumn automatyczna (równa szerokości tekstu)
-    \resizebox{\linewidth}{!}{\begin{tabular}{| c | c | c | c |} \hline
-        Architecture       		& Complexity    			& Memory   		& Performance \\ \hline\hline
-        Transformer      			&    	 $ O(N^2)$ 		& $O(N^2)$     		& great    \\ \hline
-        RNN     				&    	$O(N)$		 	& $O(N)$    		& poor     \\ \hline
-        SSM      				&  	$O(N)$ 			& $O(N)$     		& poor     \\ \hline
-       Selective SSM (Mamba)     &    	 $O(N)$ 			& $O(N)$    		& great.  \\ \hline
-        % Komórka o szerokości dwóch kolumn, wyrównana do prawej
-        % Przypisy dolne w tabelach wstawiamy przez \tablefootnote
-        % \multicolumn{2}{|r|}{Suma\tablefootnote{Table footnote.}} & 123,45 \\ \hline
-    \end{tabular}}
-\end{table}
-
 \begin{figure}[!htbp]
     \centering \includegraphics[width=\linewidth]{../assets/results.png}
     \caption{Benchmarks \cite{mamba}}
@@ -500,7 +479,15 @@ Whole architecture is build from many Mamba block which are computed layer by la
 \section{Training Setup}
 TODO
 \section{Experiments}
-TODO
+\subsection{Synthetic Data}
+To first check that our training setup is correct we decided to overfit the model to synthetic data. For this purpose we generated sequence $0, 1, ..., 1999$ and trained the tried to make model generate it after receiving 0 token as imput. During the training loss  quickly approached zero. When testing the model it managed to generate the entire sequence correctly, abeit it requred tunung the generation function's parameters.
+ 
+ \begin{figure}[!htbp]
+    \centering \includegraphics[width=\linewidth]{../assets/synth_data_train.png}
+    \caption{ Loss during training on synthetic data}
+    \label{fig:synth}
+\end{figure}
+ 
 \section{Conclusions}
 TODO
 % An example of a floating figure using the graphicx package.
