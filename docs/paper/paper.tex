@@ -506,7 +506,7 @@ Whole architecture is build from many Mamba block which are computed layer by la
 TODO
 \section{Experiments}
 \subsection{Synthetic Data}
-To first check that our training setup is correct we decided to overfit the model to synthetic data. For this purpose we generated sequence $0, 1, ..., 1999$ and trained the tried to make model generate it after receiving 0 token as imput. During the training loss  quickly approached zero. When testing the model it managed to generate the entire sequence correctly, abeit it requred tunung the generation function's parameters.
+To first check that our training setup is correct we decided to overfit the model to synthetic data. For this purpose we generated sequence $0, 1, ..., 1999$ the tried to make model recreate it after receiving 0 token as input. During the training loss quickly approached zero. When testing the model it managed to generate the entire sequence correctly, abeit it required tuning the generation function's parameters.
 
 \begin{figure}[!htbp]
     \centering \includegraphics[width=\linewidth]{../assets/synth_data_train.png}
@@ -527,11 +527,17 @@ We conducted a series of experiments to evaluate the performance of the Mamba ar
 
 Each experiment was carefully monitored, and the generated outputs were analyzed to determine the model's effectiveness in capturing musical structures and patterns.
 
-\section{Conclusions}
-TODO
+\begin{figure}[!htbp]
+    \centering \includegraphics[width=\linewidth]{../assets/train.png}
+    \caption{Training and validation losses in various experiments}
+    \label{fig:synth}
+\end{figure}
 
-\section{Future work}
-While Mamba offers better performance than transformers, it comes at the cost of output quality. A promising direction for future research is to experiment with hybrid architectures that combine the strengths of both models. Examples of such architectures include \textbf{MambaFormer} \cite{mambaformer} and \textbf{Jamba} \cite{jamba}.
+\section{Conclusions}
+Although mamba managed to generate novel samples, they weren't of high quality. This may be due our models being unable to handle the complexities of virtuosic music. The model might be more suited for simpler datasets that do not contain such intricate musical scores. 
+
+\subsection{Future work}
+While Mamba offers better performance than transformers, it comes at the cost of output quality. A promising direction for future research is to experiment with hybrid architectures that combine the strengths of both models. Examples of such architectures include \textbf{MambaFormer} \cite{mambaformer} and \textbf{Jamba} \cite{jamba}. It is also worth trying different datasets, to see how mamba handles them.
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
