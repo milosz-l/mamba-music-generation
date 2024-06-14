@@ -514,6 +514,19 @@ To first check that our training setup is correct we decided to overfit the mode
     \label{fig:synth}
 \end{figure}
 
+TODO: second version:
+We conducted a series of experiments to evaluate the performance of the Mamba architecture in symbolic music generation. The experiments are outlined as follows:
+
+\begin{enumerate}
+    \item \textbf{Simple Sequence Training}: We began by training the model on a simple numerical sequence (e.g., 0, 1, 2, 3, 4, ...). This experiment was designed to verify the model's ability to learn and reproduce basic patterns. The main goal of this part was to catch any implementation bugs as soon as possible.
+
+    \item \textbf{Single Musical Piece Training}: Next, we trained the model on a single musical piece. This experiment aimed to assess the model's capacity to understand and generate music from a limited dataset. Even though it may seem to be a trivial task, playing with configuration was necessary – both training and inference.
+
+    \item \textbf{Comprehensive Training on Multiple Pieces}: Finally, we conducted full-scale training using a diverse set of musical pieces from the MAESTRO dataset. This experiment was intended to evaluate the model's performance in generating complex and varied musical compositions.
+\end{enumerate}
+
+Each experiment was carefully monitored, and the generated outputs were analyzed to determine the model's effectiveness in capturing musical structures and patterns.
+
 \section{Conclusions}
 TODO
 
