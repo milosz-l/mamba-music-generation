@@ -401,13 +401,13 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-    Over the past few years, a lot of effort has been put into making Transformers more and more efficient. However, they still suffer from quadratic memory and inference time complexity.  Recently they have been experiencing increasing competition from state space models (SSMs), that avoid some of transformer's drawbacks. In this paper we test one of state of the art SSM models called Mamba in symbolic music generation. To achieve this we conducted several experiments on MAESTRO MIDI dataset. Our results show that TODO
+    Over the past few years, a lot of effort has been put into making Transformers more and more efficient. However, they still suffer from quadratic memory and inference time complexity. Recently they have been experiencing increasing competition from state space models (SSMs), that avoid some of transformer's drawbacks. In this paper we test one of state-of-the-art SSM models called Mamba in symbolic music generation. To achieve this we conducted several experiments on MAESTRO MIDI dataset. Our results show that TODO
 \end{abstract}
 
 % no keywords
 
 \begin{IEEEkeywords}
-    deep leraning, transformer, music, symbolic music generation, neural network, generative, unsupervised learning, state space model, ssm, mamba
+    deep learning, transformer, music, symbolic music generation, neural network, generative, unsupervised learning, state space model, ssm, mamba
 \end{IEEEkeywords}
 
 
@@ -425,7 +425,7 @@
 
 \section{Introduction}
 % no \IEEEPARstart
-Symbolic music generation has been an area of active research over the past decades. In the beginning it was dominated by classical methods like Hidden Markov Models. During the advent of deep learning in the last decade, neural networks managed to become a go to method for this task. During those years a lot of architectures, including Long Short-term Memory networks (LSTMs) \cite{lstm}, Variational Autoencoders (VAEs) \cite{kingma2022autoencoding} and Generative Adversarial Networks (GANs) \cite{goodfellow2014generative} were used to successfully generate music in symbolic formats. However, after popularisation of Transformers \cite{attention-is-all-you-need} and Diffusion Models \cite{ho2020denoising} in the field broad of deep learning, they seem to be gaining more and more dominance in the area of symbolic music generation.  In the case of transformers, which are the go to architecture in the area of natural language processing, a lot of effort has been put into small iterative improvements, to make the more efficient. However, they still suffer from quadratic GPU memory, as well as inference time complexity. To mitigate those problems State Space Models (SSMs) \cite{ssm} were developed.  Recently they have been experiencing gaining popularity and even beating transformers on some of their most signature tasks in the field of nature language processing, while being significantly smaller \cite{mamba}. They seem to be especially suited for long time dependencies. Musical data, which often contains such long dependencies seem to be suited to further test the performance of SSMs. Therefore we decided to use current state of the art SSM model called Mamba \cite{mamba} to generate music in symbolic format.
+Symbolic music generation has been an area of active research over the past decades. In the beginning it was dominated by classical methods like Hidden Markov Models. During the advent of deep learning in the last decade, neural networks managed to become a go-to method for this task. During those years a lot of architectures, including Long Short-term Memory networks (LSTMs) \cite{lstm}, Variational Autoencoders (VAEs) \cite{kingma2022autoencoding} and Generative Adversarial Networks (GANs) \cite{goodfellow2014generative} were used to successfully generate music in symbolic formats. However, after popularisation of Transformers \cite{attention-is-all-you-need} and Diffusion Models \cite{ho2020denoising} in the field broad of deep learning, they seem to be gaining more and more dominance in the area of symbolic music generation.  In the case of transformers, which are the go-to architecture in the area of natural language processing, a lot of effort has been put into small iterative improvements, to make them more efficient. However, they still suffer from quadratic GPU memory and inference time complexity. To mitigate those problems State Space Models (SSMs) \cite{ssm} were developed.  Recently, they have been gaining popularity and even beating transformers on some of their most signature tasks in the field of natural language processing, while being significantly smaller \cite{mamba}. They seem to be especially suited for long time dependencies. Musical data, which often contains such long dependencies, seem to be suited for further testing the performance of SSMs. Therefore we decided to use current state-of-the-art SSM model called Mamba \cite{mamba} to generate music in symbolic format.
 
 
 %\hfill mds
@@ -442,7 +442,7 @@ Symbolic music generation has been an area of active research over the past deca
 
 %\clearpage
 \section{Data}
-We decided to use MIDI \cite{midi} music representation. It is by far the most popular format in the field of symbolic music and allows us to freely use the largest symbolic music datasets available. Because of model's size a lot of data is required to reduce the chance of overfitting. The dataset we chose is MAESTRO (MIDI and Audio Edited for Synchronous TRacks and Organization) \cite{maestro1} \cite{maestro2} . It contains over 200 hours of virtuosic piano performances. The data comes from ten years of International Piano-e-Competition. It is one of the most popular datasets, which allows us to easily compare our results to other models. The data was downloaded using Muspy \cite{muspy} library, which allows for convenient handling of symbolic musical data. The tokenization was conducted using miditok \cite{miditok2021} library. It contains methods for tokenising MIDI data into most of the most popular formats. We decided to opt for REMI \cite{remi} format with learned Byte-Pair Encodings.
+We decided to use MIDI \cite{midi} music representation. It is by far the most popular format in the field of symbolic music and allows us to freely use the largest symbolic music datasets available. Because of the model's size, a lot of data is required to reduce the chance of overfitting. The dataset we chose is MAESTRO (MIDI and Audio Edited for Synchronous TRacks and Organization) \cite{maestro1} \cite{maestro2}. It contains over 200 hours of virtuosic piano performances. The data comes from ten years of the International Piano-e-Competition. It is one of the most popular datasets, allowing us to easily compare our results to other models. The data was downloaded using Muspy \cite{muspy} library, which allows for convenient handling of symbolic musical data. Tokenization was conducted using the miditok \cite{miditok2021} library. It contains methods for tokenising MIDI data into most of the most popular formats. We decided to opt for REMI \cite{remi} format with learned Byte-Pair Encodings.
 
 \section{Architecture}
 Mamba utilises a novel approach called selective state space models (SSMs), which enhance traditional state space models by allowing
@@ -473,7 +473,7 @@ The main bottleneck of this approach is managing the data transfer between these
 \end{figure}
 
 Selective SSM is a crucial component of the Mamba block, but the system also includes linear layers that increase dimensionality, nonlinear layers, and gating connections.
-Whole architecture is build from many Mamba block which are computed layer by layer.
+The whole architecture is built from many Mamba blocks, which are computed layer by layer.
 
 
 \begin{table}[t] \centering
@@ -506,7 +506,7 @@ Whole architecture is build from many Mamba block which are computed layer by la
 TODO
 \section{Experiments}
 \subsection{Synthetic Data}
-To first check that our training setup is correct we decided to overfit the model to synthetic data. For this purpose we generated sequence $0, 1, ..., 1999$ the tried to make model recreate it after receiving 0 token as input. During the training loss quickly approached zero. When testing the model it managed to generate the entire sequence correctly, abeit it required tuning the generation function's parameters.
+To first check that our training setup is correct, we decided to overfit the model to synthetic data. For this purpose, we generated sequence $0, 1, ..., 1999$ then tried to make the model recreate it after receiving the 0 token as input. During the training, the loss quickly approached zero. When testing the model, it managed to generate the entire sequence correctly, albeit it required tuning the generation function's parameters.
 
 \begin{figure}[!htbp]
     \centering \includegraphics[width=\linewidth]{../assets/synth_data_train.png}
@@ -534,10 +534,10 @@ Each experiment was carefully monitored, and the generated outputs were analyzed
 \end{figure}
 
 \section{Conclusions}
-Although mamba managed to generate novel samples, they weren't of high quality. This may be due our models being unable to handle the complexities of virtuosic music. The model might be more suited for simpler datasets that do not contain such intricate musical scores. 
+Although Mamba managed to generate novel samples, they weren't of high quality. This may be due to our models being unable to handle the complexities of virtuosic music. The model might be more suited for simpler datasets that do not contain such intricate musical scores.
 
 \subsection{Future work}
-While Mamba offers better performance than transformers, it comes at the cost of output quality. A promising direction for future research is to experiment with hybrid architectures that combine the strengths of both models. Examples of such architectures include \textbf{MambaFormer} \cite{mambaformer} and \textbf{Jamba} \cite{jamba}. It is also worth trying different datasets, to see how mamba handles them.
+While Mamba offers better performance than transformers, it comes at the cost of output quality. A promising direction for future research is to experiment with hybrid architectures that combine the strengths of both models. Examples of such architectures include \textbf{MambaFormer} \cite{mambaformer} and \textbf{Jamba} \cite{jamba}. It is also worth trying different datasets to see how Mamba handles them.
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -627,7 +627,7 @@ While Mamba offers better performance than transformers, it comes at the cost of
 % - or typically anywhere on the first page for that matter. Also,
 % in-text middle ("here") positioning is typically not used, but it
 % is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
+% not Computer Society journals). Most IEEE journals/conferences use 
 % top floats exclusively. 
 % Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the
