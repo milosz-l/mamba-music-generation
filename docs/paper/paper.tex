@@ -401,7 +401,7 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-    Over the past few years, a lot of effort has been put into making Transformers more and more efficient. However, they still suffer from quadratic memory and inference time complexity. Recently they have been experiencing increasing competition from state space models (SSMs), that avoid some of transformer's drawbacks. In this paper we test one of state-of-the-art SSM models called Mamba in symbolic music generation. To achieve this we conducted several experiments on MAESTRO MIDI dataset. Our results show that TODO
+    Over the past few years, a lot of effort has been put into making Transformers more and more efficient. However, they still suffer from quadratic memory and inference time complexity. Recently they have been experiencing increasing competition from state space models (SSMs), that avoid some of transformer's drawbacks. In this paper we test one of state-of-the-art SSM models called Mamba in symbolic music generation. To achieve this we conducted several experiments on MAESTRO MIDI dataset. Our results show that while mamba can be used to generate novel musical scores, their quality leaves much to be desired.
 \end{abstract}
 
 % no keywords
@@ -502,8 +502,6 @@ The whole architecture is built from many Mamba blocks, which are computed layer
     \label{fig:mamba}
 \end{figure}
 
-\section{Training Setup}
-TODO
 \section{Experiments}
 \subsection{Synthetic Data}
 To first check that our training setup is correct, we decided to overfit the model to synthetic data. For this purpose, we generated sequence $0, 1, ..., 1999$ then tried to make the model recreate it after receiving the 0 token as input. During the training, the loss quickly approached zero. When testing the model, it managed to generate the entire sequence correctly, albeit it required tuning the generation function's parameters.
@@ -514,7 +512,6 @@ To first check that our training setup is correct, we decided to overfit the mod
     \label{fig:synth}
 \end{figure}
 
-TODO: second version:
 We conducted a series of experiments to evaluate the performance of the Mamba architecture in symbolic music generation. The experiments are outlined as follows:
 
 \begin{enumerate}
