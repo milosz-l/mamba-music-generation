@@ -3,6 +3,8 @@ docs/paper/*
 !docs/paper/paper.tex
 !docs/paper/references.bib
 !docs/paper/paper.pdf
+!docs/paper/fig1.png
+!docs/paper/IEEEtran.cls
 
 *.wav
 *.ckpt
