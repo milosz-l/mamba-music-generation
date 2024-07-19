@@ -2,6 +2,7 @@ from typing import Iterable
 from pathlib import Path
 from datetime import datetime
 import torch
+import wandb
 
 from miditok import MusicTokenizer
 from symusic import Synthesizer, dump_wav
@@ -83,4 +84,7 @@ def generate_music(input_ids, model, config, overtrained_song=None):
         # Calculate the percentage of elements that are the same
         percentage_same = torch.sum(matches).item() / matches.numel() * 100
 
-        print(f"Percentage of elements that are the same: {percentage_same}%")
+        success_message = f"Percentage of elements that are the same: {percentage_same}%"
+        print(success_message)
+        wandb.log({"success_message": success_message})
+
