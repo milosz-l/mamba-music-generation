@@ -76,6 +76,7 @@ def generate_music(input_ids, model, config, overtrained_song=None):
         generated_sequence = generated_sequence[:, :max_dim].cpu()
         concatenated_song = torch.cat((overtrained_song, generated_sequence),
                                       dim=0)
+        print("Concatenated songs:")
         print(concatenated_song)
 
         # Compare tensors element-wise
@@ -86,5 +87,8 @@ def generate_music(input_ids, model, config, overtrained_song=None):
 
         success_message = f"Percentage of elements that are the same: {percentage_same}%"
         print(success_message)
-        wandb.log({"success_message": success_message})
+        try:
+            wandb.log({"success_message": success_message, "concatenated_songs": concatenated_song})
+        except:
+            print("Cannot log to wnadb info about similarity of two sequences")
 
