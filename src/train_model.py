@@ -53,10 +53,6 @@ def train_model(config: DictConfig):
     # torch.save(interface_model.model.state_dict(),
     #            model_path / f"{experiment_name}_model.pt")
 
-    wandb.finish()
-
-    cleanup_wandb_local_cache()
-
     interface_model.model.eval()
     interface_model.model.inference_mode = True
 
@@ -68,6 +64,9 @@ def train_model(config: DictConfig):
                    model=interface_model.model,
                    config=config,
                    overtrained_song=overtrained_song)
+    wandb.finish()
+
+    cleanup_wandb_local_cache()
 
 
 if __name__ == "__main__":
