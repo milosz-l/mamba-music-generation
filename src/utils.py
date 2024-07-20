@@ -32,9 +32,10 @@ def generate_music(input_ids, model, config, overtrained_song=None):
 
     # Load the tokenizer
     tokenizer = get_tokenizer(config)
+    eso_token = tokenizer['EOS_None']
 
     # prepare EOS token id
-    print(f"eos_token_id: {tokenizer['EOS_None']}")
+    print(f"eos_token_id: {eso_token}")
 
     model.to(device)
     input_ids = input_ids.to(device)
@@ -46,14 +47,20 @@ def generate_music(input_ids, model, config, overtrained_song=None):
     print("Model device:", next(model.parameters()).device)
     print("Input tensor device:", input_ids.device)
 
-    # Use model.generate for sequence generation
-    generated_sequence = model.generate(
-        input_ids=input_ids,
-        max_length=config.inference.max_length,
-        temperature=config.inference.temperature,
-        top_k=config.inference.top_k,
-        eos_token_id=tokenizer["EOS_None"],
-        repetition_penalty=config.inference.repetition_penalty)
+    if config.inference.custom:
+        generated_sequence = model.generate(
+            input_ids=input_ids,
+            sequence_length=config.inference.max_length
+        )
+    else:
+        # Use model.generate for sequence generation
+        generated_sequence = model.model.generate(
+            input_ids=input_ids,
+            max_length=config.inference.max_length,
+            temperature=config.inference.temperature,
+            top_k=config.inference.top_k,
+            eos_token_id=eso_token,
+            repetition_penalty=config.inference.repetition_penalty)
 
     # Export the output to a .wav file
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -68,9 +75,9 @@ def generate_music(input_ids, model, config, overtrained_song=None):
     export_to_wav(tokenizer, tokens, (test_path / wav_filename).as_posix())
 
     if overtrained_song is not None:
-        original_song = overtrained_song.unsqueeze(0).cpu()
-        max_dim = min(original_song.shape[-1], overtrained_song.shape[-1])
-        export_to_wav(tokenizer, original_song.numpy(),
+        overtrained_song = overtrained_song.unsqueeze(0).cpu()
+        max_dim = min(generated_sequence.shape[-1], overtrained_song.shape[-1])
+        export_to_wav(tokenizer, overtrained_song.numpy(),
                       (test_path / "input.wav").as_posix())
         overtrained_song = overtrained_song[:max_dim].unsqueeze(0)
         generated_sequence = generated_sequence[:, :max_dim].cpu()
@@ -92,3 +99,54 @@ def generate_music(input_ids, model, config, overtrained_song=None):
         except:
             print("Cannot log to wnadb info about similarity of two sequences")
 
+
+def compare_sequences(input_ids, model, config, base_sequence=None):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    print(f"Input Token For Generation: {input_ids}")
+    model.to(device)
+    input_ids = input_ids.to(device)
+
+    # Print the current device for verification
+    print("Current device:", device)
+
+    # Print device information for the model and input tensor to confirm they're on the same device
+    print("Model device:", next(model.parameters()).device)
+    print("Input tensor device:", input_ids.device)
+    if config.inference.custom:
+        generated_sequence = model.generate(
+            input_ids=input_ids,
+            sequence_length=config.inference.max_length
+        )
+    else:
+        generated_sequence = model.model.generate(
+            input_ids=input_ids,
+            max_length=config.inference.max_length,
+            temperature=config.inference.temperature,
+            top_k=config.inference.top_k,
+            repetition_penalty=config.inference.repetition_penalty)
+
+    overtrained_song = base_sequence.unsqueeze(0).cpu()
+    max_dim = min(generated_sequence.shape[-1], overtrained_song.shape[-1])
+
+    overtrained_song = overtrained_song[:max_dim]
+    generated_sequence = generated_sequence[:, :max_dim].cpu()
+    print("ORIGIN SHAPE", overtrained_song.shape)
+    print("GEN SHAPE", generated_sequence.shape)
+    concatenated_song = torch.cat((overtrained_song, generated_sequence),
+                                  dim=0)
+    print("Concatenated songs:")
+    print(concatenated_song)
+
+    # Compare tensors element-wise
+    matches = overtrained_song == generated_sequence
+
+    # Calculate the percentage of elements that are the same
+    percentage_same = torch.sum(matches).item() / matches.numel() * 100
+
+    success_message = f"Percentage of elements that are the same: {percentage_same}%"
+    print(success_message)
+    try:
+        wandb.log({"success_message": success_message, "concatenated_songs": concatenated_song})
+    except:
+        print("Cannot log to wnadb info about similarity of two sequences")
