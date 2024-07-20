@@ -95,7 +95,8 @@ def generate_music(input_ids, model, config, overtrained_song=None):
         success_message = f"Percentage of elements that are the same: {percentage_same}%"
         print(success_message)
         try:
-            wandb.log({"success_message": success_message, "concatenated_songs": concatenated_song})
+            wandb.log({"success_message": success_message, "concatenated_songs": concatenated_song,
+                       "success": percentage_same})
         except:
             print("Cannot log to wnadb info about similarity of two sequences")
 
@@ -147,6 +148,6 @@ def compare_sequences(input_ids, model, config, base_sequence=None):
     success_message = f"Percentage of elements that are the same: {percentage_same}%"
     print(success_message)
     try:
-        wandb.log({"success_message": success_message, "concatenated_songs": concatenated_song})
+        wandb.log({"success_message": success_message, "concatenated_songs": concatenated_song, "success": percentage_same})
     except:
         print("Cannot log to wnadb info about similarity of two sequences")
