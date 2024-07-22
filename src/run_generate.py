@@ -5,7 +5,7 @@ from omegaconf import DictConfig
 from mamba_model import get_mamba_model
 import wandb
 
-from utils import generate_music
+from utils import generate_music, compare_sequences
 
 
 def load_model(model_path, config, inference_mode=True):
@@ -64,8 +64,12 @@ def main(config: DictConfig):
         input_length = config.inference.input_length
         vocab_size = config.model.vocab_size
         input_ids = torch.randint(0, vocab_size, (1, input_length))
+    overtrained_song = None
+    if config.inference.overtrained_song:
+        overtrained_song = config.inference.overtrained_song
 
-    generate_music(input_ids, model, config)
+
+    compare_sequences(input_ids, model, config, base_sequence=overtrained_song)
 
 
 if __name__ == "__main__":

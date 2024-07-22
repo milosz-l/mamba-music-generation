@@ -47,20 +47,14 @@ def generate_music(input_ids, model, config, overtrained_song=None):
     print("Model device:", next(model.parameters()).device)
     print("Input tensor device:", input_ids.device)
 
-    if config.inference.custom:
-        generated_sequence = model.generate(
-            input_ids=input_ids,
-            sequence_length=config.inference.max_length
-        )
-    else:
-        # Use model.generate for sequence generation
-        generated_sequence = model.model.generate(
-            input_ids=input_ids,
-            max_length=config.inference.max_length,
-            temperature=config.inference.temperature,
-            top_k=config.inference.top_k,
-            eos_token_id=eso_token,
-            repetition_penalty=config.inference.repetition_penalty)
+    # Use model.generate for sequence generation
+    generated_sequence = model.model.generate(
+        input_ids=input_ids,
+        max_length=config.inference.max_length,
+        temperature=config.inference.temperature,
+        top_k=config.inference.top_k,
+        eos_token_id=eso_token,
+        repetition_penalty=config.inference.repetition_penalty)
 
     # Export the output to a .wav file
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -114,20 +108,19 @@ def compare_sequences(input_ids, model, config, base_sequence=None):
     # Print device information for the model and input tensor to confirm they're on the same device
     print("Model device:", next(model.parameters()).device)
     print("Input tensor device:", input_ids.device)
-    if config.inference.custom:
-        generated_sequence = model.generate(
-            input_ids=input_ids,
-            sequence_length=config.inference.max_length
-        )
-    else:
-        generated_sequence = model.model.generate(
-            input_ids=input_ids,
-            max_length=config.inference.max_length,
-            temperature=config.inference.temperature,
-            top_k=config.inference.top_k,
-            repetition_penalty=config.inference.repetition_penalty)
 
-    overtrained_song = base_sequence.unsqueeze(0).cpu()
+    generated_sequence = model.generate(
+        input_ids=input_ids,
+        max_length=config.inference.max_length,
+        temperature=config.inference.temperature,
+        top_k=config.inference.top_k,
+        repetition_penalty=config.inference.repetition_penalty)
+
+    print(base_sequence)
+    if isinstance(base_sequence, torch.Tensor):
+        overtrained_song = base_sequence.unsqueeze(0).cpu()
+    else:
+        overtrained_song = torch.Tensor([base_sequence])
     max_dim = min(generated_sequence.shape[-1], overtrained_song.shape[-1])
 
     overtrained_song = overtrained_song[:max_dim]
