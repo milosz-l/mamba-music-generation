@@ -48,7 +48,7 @@ def generate_music(input_ids, model, config, overtrained_song=None):
     print("Input tensor device:", input_ids.device)
 
     # Use model.generate for sequence generation
-    generated_sequence = model.model.generate(
+    generated_sequence = model.generate(
         input_ids=input_ids,
         max_length=config.inference.max_length,
         temperature=config.inference.temperature,
@@ -116,7 +116,6 @@ def compare_sequences(input_ids, model, config, base_sequence=None):
         top_k=config.inference.top_k,
         repetition_penalty=config.inference.repetition_penalty)
 
-    print(base_sequence)
     if isinstance(base_sequence, torch.Tensor):
         overtrained_song = base_sequence.unsqueeze(0).cpu()
     else:

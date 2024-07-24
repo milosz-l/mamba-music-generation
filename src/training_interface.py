@@ -100,9 +100,3 @@ class LighteningMamba(pl.LightningModule):
                                                     gamma=0.1)
         return [optimizer], [scheduler]
 
-    def generate(self, input_ids: torch.Tensor, sequence_length: int) -> torch.Tensor:
-        # TODO correct this!
-        with torch.no_grad():
-            output_ids = self(input_ids)
-            return output_ids
-

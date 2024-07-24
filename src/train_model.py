@@ -59,13 +59,13 @@ def train_model(config: DictConfig):
     input_ids = torch.tensor([[interface_model.first_token]], dtype=torch.long)
     if config.data.name == "sequence":
         base_sequence = interface_model.train_dataset[0]["input_ids"]
-        compare_sequences(input_ids=input_ids, model=interface_model, config=config, base_sequence=base_sequence)
+        compare_sequences(input_ids=input_ids, model=interface_model.model, config=config, base_sequence=base_sequence)
     elif config.data.name == "midi":
         overtrained_song = None
         if config.data.test_train_on_one_file:
             overtrained_song = interface_model.train_dataset[0]["input_ids"]
         generate_music(input_ids=input_ids,
-                       model=interface_model,
+                       model=interface_model.model,
                        config=config,
                        overtrained_song=overtrained_song)
     wandb.finish()
