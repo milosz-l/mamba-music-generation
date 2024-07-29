@@ -99,3 +99,4 @@ class LighteningMamba(pl.LightningModule):
                                                     step_size=3,
                                                     gamma=0.1)
         return [optimizer], [scheduler]
+

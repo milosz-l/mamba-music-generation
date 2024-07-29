@@ -16,7 +16,7 @@ from training_interface import LighteningMamba
 from callbacks import get_callbacks
 import wandb
 from wandb_cleanup import cleanup_wandb_local_cache
-from utils import generate_music
+from utils import generate_music, compare_sequences
 from tokenizer import DATA_TEMPDIR
 
 os.environ["TOKENIZERS_PARALLELISM"] = "true"
@@ -27,8 +27,8 @@ def train_model(config: DictConfig):
 
     wandb_logger = WandbLogger(project=config.wandb.project,
                                entity=config.wandb.entity,
-                               log_model=True)
-
+                               group=config.wandb.group,
+                               log_model=False)
     torch.cuda.empty_cache()
     torch.set_float32_matmul_precision('medium')
 
@@ -57,13 +57,17 @@ def train_model(config: DictConfig):
     interface_model.model.inference_mode = True
 
     input_ids = torch.tensor([[interface_model.first_token]], dtype=torch.long)
-    overtrained_song = None
-    if config.data.test_train_on_one_file:
-        overtrained_song = interface_model.train_dataset[0]["input_ids"]
-    generate_music(input_ids=input_ids,
-                   model=interface_model.model,
-                   config=config,
-                   overtrained_song=overtrained_song)
+    if config.data.name == "sequence":
+        base_sequence = interface_model.train_dataset[0]["input_ids"]
+        compare_sequences(input_ids=input_ids, model=interface_model.model, config=config, base_sequence=base_sequence)
+    elif config.data.name == "midi":
+        overtrained_song = None
+        if config.data.test_train_on_one_file:
+            overtrained_song = interface_model.train_dataset[0]["input_ids"]
+        generate_music(input_ids=input_ids,
+                       model=interface_model.model,
+                       config=config,
+                       overtrained_song=overtrained_song)
     wandb.finish()
 
     cleanup_wandb_local_cache()

@@ -1,17 +1,8 @@
 defaults:
   - model: mamba
+  - data: sequence
   - _self_
 
-data:
-  path: data
-  dataset_name: maestro
-  tokenizer:
-    type: tsd  # remi | midiike | tsd, structured | cpword | octuple | mumidi | mmm
-    training_model: BPE  # BPE | Unigram | WordPiece
-  train_split: 0.8
-  max_seq_len: 1024
-  test_train_on_one_file: False  # set True if you want to overtrain on one song
-  test_train_on_one_file_path: ""  # empty if you want to use random song
 
 training:
   num_workers: 4 # lower this setting in case of workers segmentation fault error
@@ -21,12 +12,13 @@ training:
   step_size: 3
   gamma: 0.1
   callbacks:
-    patience: 3
+    patience: 5
 
 
 wandb:
   project: "WIMU mamba-music-generation"
   entity: "wut-zzsn"
+  group: "sequence"
   cleanup:
     dry_run: False
     run_cleanup_every_epochs: 5
@@ -35,10 +27,31 @@ models:
   save_path: models
 
 inference:
-  wandb_model_full_name: "wut-zzsn/WIMU mamba-music-generation/model-wnz2pevd:v2" # example: "wut-zzsn/WIMU mamba-music-generation/model-mn6cowxw:v4"
-  model_path: "models/model-mn6cowxw:v4.ckpt" # optional, if you want to load model that is not in wandb fill this and leave wandb_model_full_name empty
+  wandb_model_full_name: "" # example: "wut-zzsn/WIMU mamba-music-generation/model-mn6cowxw:v4"
+  model_path: "/home/kuba/repo/WIMU/WIMU mamba-music-generation/jxo32clm/checkpoints/best-checkpoint.ckpt" # optional, if you want to load model that is not in wandb fill this and leave wandb_model_full_name empty
   input_length: 1   # Example length
+  input_ids: [12873]
   max_length: 1024
   temperature: 0.8
   top_k: 70
   repetition_penalty: 0.9
+  overtrained_song: [12873,   252, 15716, 12384, 15200,  6380,  1977, 19190,  5129,  3732,
+          7087, 10226, 11585, 18221,   433, 13169, 13987, 16555, 11117, 15765,
+          8600, 19000, 15414, 14961, 15734,  8159, 17810,  8837,  3055, 13079,
+         11148,   518,  8702, 12832, 14591,  7378,  6234, 15816,  9394,  1035,
+         19800,  9023,  5078,  3484,    67,  1889, 15603, 12072, 11721,  7624,
+         18040, 10709, 13308,  1900, 15520,   139, 18381, 16280,   251, 18125,
+         19911,  5720, 11652, 16339, 12122, 18002, 11822,  8299,  2526, 12703,
+         15573, 19819, 12248,   301,  2836, 18165,  5573,  8930, 12848,  9251,
+          5983,  4134,  4888, 12445, 11446,  7868, 10516, 15263, 10013, 10866,
+         10168, 14514, 10059, 15947,  1844, 10209,  1821, 17167, 11421, 16607,
+         15289,  7545,  9259, 13927, 15386,   886,  6162,  6484,  2674,  1569,
+         11833, 14624,  5642, 16198, 12692,  2289,  1130, 17765,  6645, 15406,
+          6428,  1512,  2405,  1646, 19416,  7090, 12130, 11221,  3991,   523,
+         10698, 10615,  6243, 13938,  5510, 16630,  5784, 16952, 11006,  6036,
+          2762, 11378, 12729, 13926, 11033, 16158,  1324, 12778,  4691,   271,
+          4319,   743,  5025, 16214, 17057, 15274,  2415, 14256,  2742,  3419,
+         13712, 19149,  4278, 16755,  9421, 17887, 16277, 11671,  4589, 12081,
+         16133, 19446, 13951, 14458, 18255, 11674,  3082,  7439,    77, 13295,
+          1631,   794,  2770, 15019, 12643,  4915,  4693,  5142, 16143, 16700,
+          8951, 18906, 10833,  2245,  2590,  8467,  8672, 16328, 12095,   713]

@@ -1,0 +1,10 @@
+name: midi
+path: data
+dataset_name: maestro
+tokenizer:
+  type: tsd  # remi | midiike | tsd, structured | cpword | octuple | mumidi | mmm
+  training_model: BPE  # BPE | Unigram | WordPiece
+train_split: 0.8
+max_seq_len: 1024
+test_train_on_one_file: False  # set True if you want to overtrain on one song
+test_train_on_one_file_path: ""  # empty if you want to use random song
