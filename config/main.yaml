@@ -2,8 +2,6 @@ defaults:
   - model: mamba
   - data: sequence
   - _self_
-
-
 training:
   num_workers: 4 # lower this setting in case of workers segmentation fault error
   batch_size: 1

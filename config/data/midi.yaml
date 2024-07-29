@@ -1,6 +1,6 @@
 name: midi
 path: data
-dataset_name: maestro
+dataset_name: midicaps  # midicaps or maestro
 tokenizer:
   type: tsd  # remi | midiike | tsd, structured | cpword | octuple | mumidi | mmm
   training_model: BPE  # BPE | Unigram | WordPiece
